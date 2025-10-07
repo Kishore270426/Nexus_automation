@@ -48,7 +48,8 @@ class POScraper:
         await page.click("a:has-text('Orders')")
         await page.wait_for_selector("span#ResultRN1", timeout=self.config.navigation_timeout)
 
-    async def _scrape_page(self, page):
+    async def _scrape_page(self, page, page_number):
+        logger.info(f"📄 Scraping page {page_number}...")
         await page.wait_for_selector("span#ResultRN1 table tbody tr", timeout=self.config.page_load_timeout)
         rows = await page.query_selector_all("span#ResultRN1 table tbody tr")
         for row in rows:
@@ -60,6 +61,8 @@ class POScraper:
                         "po_number": po_text,
                         "status": (await cells[12].inner_text()).strip()
                     })
+        logger.info(f"✅ Finished scraping page {page_number}, total records: {len(self.records)}")
+
 
     async def scrape_data(self):
         async with async_playwright() as p:
@@ -69,21 +72,29 @@ class POScraper:
             await self._login(page)
             await self._navigate_to_orders(page)
 
-            for _ in range(self.config.max_pages):
-                await self._scrape_page(page)
+            page_number = 1
+            while True:
+                await self._scrape_page(page, page_number)
+
                 next_button = await page.query_selector("a:has-text('Next')")
                 if next_button:
                     class_attr = await next_button.get_attribute("class") or ""
                     if "disabled" not in class_attr.lower():
+                        logger.info(f"➡️ Moving to page {page_number + 1}")
                         await next_button.click()
                         await asyncio.sleep(self.config.sleep_interval)
+                        page_number += 1
                     else:
+                        logger.info("⏹ No more pages, stopping scrape.")
                         break
                 else:
+                    logger.info("⏹ Next button not found, stopping scrape.")
                     break
 
             await browser.close()
             return {"status": "success", "records": self.records}
+
+
 
 # 🟢 Scheduled job to run every 15 minutes
 def scrape_and_store_in_redis():
