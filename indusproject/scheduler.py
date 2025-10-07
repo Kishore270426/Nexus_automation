@@ -1,32 +1,39 @@
-from apscheduler.schedulers.blocking import BlockingScheduler
+# indusproject/scheduler.py
+
+from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
-from datetime import datetime
-from indusproject.scrapper import scrape_indus_po_data
-from indusproject.status_scrapper import scrape_and_store_in_redis
+from .scrapper import scrape_indus_po_data
+from .status_scrapper import scrape_and_store_in_redis
+import time
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("scheduler")
 
 def start_scheduler():
-    scheduler = BlockingScheduler()
+    scheduler = BackgroundScheduler()
 
-    # Indus PO scraping
     scheduler.add_job(
         func=scrape_indus_po_data,
-        trigger=CronTrigger(hour=16, minute=0),
+        trigger=CronTrigger(hour=16, minute=30),
         id='indus_po_scraper',
         replace_existing=True
     )
 
-    # Zepto PO scraping
     scheduler.add_job(
         func=scrape_and_store_in_redis,
-        trigger=CronTrigger(hour=16, minute=45),
+        trigger=CronTrigger(hour=17, minute=30),
         id='scrape_and_store_in_redis',
         replace_existing=True
     )
 
-    print("[Scheduler] Indus PO scraper scheduled at 4:00 pm")
-    print("[Scheduler] Zepto PO scraper scheduled at 5:00 pm")
-    
-    scheduler.start()  # <-- blocks and keeps service alive
+    scheduler.start()
+    logger.info("Scheduler started with jobs added.")
 
-if __name__ == "__main__":
-    start_scheduler()
+    # Keep the script running
+    try:
+        while True:
+            time.sleep(60)
+    except (KeyboardInterrupt, SystemExit):
+        scheduler.shutdown()
+        logger.info("Scheduler stopped.")
