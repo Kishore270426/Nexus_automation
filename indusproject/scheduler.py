@@ -9,7 +9,7 @@ scheduler = BackgroundScheduler()
 # Indus PO scraping
 scheduler.add_job(
     func=scrape_indus_po_data,
-    trigger=CronTrigger(hour=13, minute=9),
+    trigger=CronTrigger(hour=16, minute=50),
     id='indus_po_scraper',
     replace_existing=True
 )
@@ -17,7 +17,7 @@ scheduler.add_job(
 # Zepto PO scraping
 scheduler.add_job(
     func=scrape_and_store_in_redis,
-    trigger=CronTrigger(hour=10, minute=38),
+    trigger=CronTrigger(hour=17, minute=30),
     id='scrape_and_store_in_redis',
     replace_existing=True
 )
