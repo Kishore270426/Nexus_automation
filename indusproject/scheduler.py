@@ -1,39 +1,34 @@
-# indusproject/scheduler.py
-
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
+from time import sleep
 from .scrapper import scrape_indus_po_data
 from .status_scrapper import scrape_and_store_in_redis
-import time
-import logging
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("scheduler")
+scheduler = BackgroundScheduler()
 
-def start_scheduler():
-    scheduler = BackgroundScheduler()
+# Indus PO scraping
+scheduler.add_job(
+    func=scrape_indus_po_data,
+    trigger=CronTrigger(hour=13, minute=9),
+    id='indus_po_scraper',
+    replace_existing=True
+)
 
-    scheduler.add_job(
-        func=scrape_indus_po_data,
-        trigger=CronTrigger(hour=16, minute=30),
-        id='indus_po_scraper',
-        replace_existing=True
-    )
+# Zepto PO scraping
+scheduler.add_job(
+    func=scrape_and_store_in_redis,
+    trigger=CronTrigger(hour=10, minute=38),
+    id='scrape_and_store_in_redis',
+    replace_existing=True
+)
 
-    scheduler.add_job(
-        func=scrape_and_store_in_redis,
-        trigger=CronTrigger(hour=17, minute=30),
-        id='scrape_and_store_in_redis',
-        replace_existing=True
-    )
+scheduler.start()
+print("[Scheduler] Scheduler started")
 
-    scheduler.start()
-    logger.info("Scheduler started with jobs added.")
-
-    # Keep the script running
-    try:
-        while True:
-            time.sleep(60)
-    except (KeyboardInterrupt, SystemExit):
-        scheduler.shutdown()
-        logger.info("Scheduler stopped.")
+# Keep the scheduler alive
+try:
+    while True:
+        sleep(60)
+except (KeyboardInterrupt, SystemExit):
+    scheduler.shutdown()
+    print("[Scheduler] Scheduler stopped")
