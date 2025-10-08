@@ -6194,3 +6194,113 @@ Exception: Page.wait_for_selector: Connection closed while reading from the driv
 2025-10-07 11:02:25.945 | INFO     | indusproject.status_scrapper:_scrape_page:64 - ✅ Finished scraping page 242, total records: 6026
 2025-10-07 11:02:25.949 | INFO     | indusproject.status_scrapper:scrape_data:91 - ⏹ Next button not found, stopping scrape.
 2025-10-07 11:02:26.635 | INFO     | indusproject.status_scrapper:scrape_and_store_in_redis:107 - Scraped data stored in Redis under key 'Po_status'
+2025-10-07 17:30:17.704 | INFO     | indusproject.status_scrapper:_scrape_page:52 - 📄 Scraping page 1...
+2025-10-07 17:30:18.156 | INFO     | indusproject.status_scrapper:_scrape_page:64 - ✅ Finished scraping page 1, total records: 13
+2025-10-07 17:30:18.162 | INFO     | indusproject.status_scrapper:scrape_data:83 - ➡️ Moving to page 2
+2025-10-07 17:30:23.216 | INFO     | indusproject.status_scrapper:_scrape_page:52 - 📄 Scraping page 2...
+2025-10-07 17:30:23.962 | INFO     | indusproject.status_scrapper:_scrape_page:64 - ✅ Finished scraping page 2, total records: 38
+2025-10-07 17:30:23.997 | INFO     | indusproject.status_scrapper:scrape_data:83 - ➡️ Moving to page 3
+2025-10-07 17:30:29.034 | INFO     | indusproject.status_scrapper:_scrape_page:52 - 📄 Scraping page 3...
+2025-10-07 17:30:29.038 | ERROR    | indusproject.status_scrapper:scrape_and_store_in_redis:111 - Error in scheduled Redis update: Page.wait_for_selector: Connection closed while reading from the driver
+Traceback (most recent call last):
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 995, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x000002413DC20400>
+    └ <Thread(ThreadPoolExecutor-1_1, started daemon 44488)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x000002413DC200E0>
+    └ <Thread(ThreadPoolExecutor-1_1, started daemon 44488)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(ThreadPoolExecutor-1_1, started daemon 44488)>
+    │    │        │    └ (<weakref at 0x0000024146EDC3B0; to 'ThreadPoolExecutor' at 0x000002414197D190>, <_queue.SimpleQueue object at 0x000002414113...
+    │    │        └ <Thread(ThreadPoolExecutor-1_1, started daemon 44488)>
+    │    └ <function _worker at 0x000002413FE44E00>
+    └ <Thread(ThreadPoolExecutor-1_1, started daemon 44488)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 83, in _worker
+    work_item.run()
+    │         └ <function _WorkItem.run at 0x000002413FE463E0>
+    └ <concurrent.futures.thread._WorkItem object at 0x0000024146ED67D0>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │    │   │    │       │    └ {}
+             │    │   │    │       └ <concurrent.futures.thread._WorkItem object at 0x0000024146ED67D0>
+             │    │   │    └ (<Job (id=scrape_and_store_in_redis name=scrape_and_store_in_redis)>, 'default', [datetime.datetime(2025, 10, 7, 17, 30, tzin...
+             │    │   └ <concurrent.futures.thread._WorkItem object at 0x0000024146ED67D0>
+             │    └ <function run_job at 0x00000241412DBBA0>
+             └ <concurrent.futures.thread._WorkItem object at 0x0000024146ED67D0>
+  File "C:\Indus_project\env\Lib\site-packages\apscheduler\executors\base.py", line 131, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+             │   │     │   │       │   └ <member 'kwargs' of 'Job' objects>
+             │   │     │   │       └ <Job (id=scrape_and_store_in_redis name=scrape_and_store_in_redis)>
+             │   │     │   └ <member 'args' of 'Job' objects>
+             │   │     └ <Job (id=scrape_and_store_in_redis name=scrape_and_store_in_redis)>
+             │   └ <member 'func' of 'Job' objects>
+             └ <Job (id=scrape_and_store_in_redis name=scrape_and_store_in_redis)>
+
+> File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 104, in scrape_and_store_in_redis
+    result = asyncio.run(scraper.scrape_data())
+             │       │   │       └ <function POScraper.scrape_data at 0x0000024141960C20>
+             │       │   └ <indusproject.status_scrapper.POScraper object at 0x0000024146ED6A90>
+             │       └ <function run at 0x000002413D6D05E0>
+             └ <module 'asyncio' from 'C:\\Users\\Lenovo\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\asyncio\\__init__.py'>
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 190, in run
+    return runner.run(main)
+           │      │   └ <coroutine object POScraper.scrape_data at 0x000002414661F9A0>
+           │      └ <function Runner.run at 0x000002413FD92DE0>
+           └ <asyncio.runners.Runner object at 0x0000024146ED6AD0>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │                        └ <Task finished name='Task-3269' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\sta...
+           │    └ None
+           └ <asyncio.runners.Runner object at 0x0000024146ED6AD0>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 653, in run_until_complete
+    return future.result()
+           │      └ <method 'result' of '_asyncio.Task' objects>
+           └ <Task finished name='Task-3269' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\sta...
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 77, in scrape_data
+    await self._scrape_page(page, page_number)
+          │    │            │     └ 3
+          │    │            └ <Page url='https://induserp.industowers.com/OA_HTML/OA.jsp?page=/oracle/apps/pos/orders/webui/PosVpoMainPG&_ri=177&retainAM=Y...
+          │    └ <function POScraper._scrape_page at 0x0000024141960B80>
+          └ <indusproject.status_scrapper.POScraper object at 0x0000024146ED6A90>
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 53, in _scrape_page
+    await page.wait_for_selector("span#ResultRN1 table tbody tr", timeout=self.config.page_load_timeout)
+          │    │                                                          │    │      └ 15000
+          │    │                                                          │    └ <indusproject.status_scrapper.ScraperConfig object at 0x0000024146ED6A50>
+          │    │                                                          └ <indusproject.status_scrapper.POScraper object at 0x0000024146ED6A90>
+          │    └ <function Page.wait_for_selector at 0x00000241418E6AC0>
+          └ <Page url='https://induserp.industowers.com/OA_HTML/OA.jsp?page=/oracle/apps/pos/orders/webui/PosVpoMainPG&_ri=177&retainAM=Y...
+
+  File "C:\Indus_project\env\Lib\site-packages\playwright\async_api\_generated.py", line 8164, in wait_for_selector
+    await self._impl_obj.wait_for_selector(
+          │    │         └ <function Page.wait_for_selector at 0x000002414156A660>
+          │    └ <Page url='https://induserp.industowers.com/OA_HTML/OA.jsp?page=/oracle/apps/pos/orders/webui/PosVpoMainPG&_ri=177&retainAM=Y...
+          └ <Page url='https://induserp.industowers.com/OA_HTML/OA.jsp?page=/oracle/apps/pos/orders/webui/PosVpoMainPG&_ri=177&retainAM=Y...
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_page.py", line 425, in wait_for_selector
+    return await self._main_frame.wait_for_selector(**locals_to_params(locals()))
+                 │    │           │                   └ <function locals_to_params at 0x000002414148D440>
+                 │    │           └ <function Frame.wait_for_selector at 0x00000241415559E0>
+                 │    └ <Frame name= url='https://induserp.industowers.com/OA_HTML/OA.jsp?page=/oracle/apps/pos/orders/webui/PosVpoMainPG&_ri=177&ret...
+                 └ <Page url='https://induserp.industowers.com/OA_HTML/OA.jsp?page=/oracle/apps/pos/orders/webui/PosVpoMainPG&_ri=177&retainAM=Y...
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_frame.py", line 341, in wait_for_selector
+    await self._channel.send(
+          │    │        └ <function Channel.send at 0x00000241412D9940>
+          │    └ <playwright._impl._connection.Channel object at 0x00000241470F0750>
+          └ <Frame name= url='https://induserp.industowers.com/OA_HTML/OA.jsp?page=/oracle/apps/pos/orders/webui/PosVpoMainPG&_ri=177&ret...
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+                 │    │           └ <function Connection.wrap_api_call at 0x000002414148FC40>
+                 │    └ <playwright._impl._connection.Connection object at 0x0000024146ED7010>
+                 └ <playwright._impl._connection.Channel object at 0x00000241470F0750>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 558, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+          └ <function rewrite_error at 0x00000241413B7740>
+
+Exception: Page.wait_for_selector: Connection closed while reading from the driver
