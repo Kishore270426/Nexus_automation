@@ -31,7 +31,7 @@ scheduler = BackgroundScheduler()
 # Indus PO scraping
 scheduler.add_job(
     func=wrapped_scrape_indus_po_data,
-    trigger=CronTrigger(hour=10, minute=32),
+    trigger=CronTrigger(hour=11, minute=25),
     id='indus_po_scraper',
     replace_existing=True
 )

@@ -266,16 +266,19 @@ def find_po_in_pages(page, po_number, max_pages=6, retries=2):
 # ================= MAIN SCRAPER =================
 def scrape_indus_po_data():
     result = []
+    ERP_LOGIN_URL = "https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp"
+    ERP_USERNAME = "bharathielectricalanna@gmail.com"
+    ERP_PASSWORD = "Jan.erp_2026"
     try:
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=False)
             context = browser.new_context()
             page = context.new_page()
-            page.goto(os.getenv("ERP_LOGIN_URL"))
+            page.goto(ERP_LOGIN_URL)
 
             # Login
-            page.fill("input#usernameField", os.getenv("ERP_USERNAME"))
-            page.fill("input#passwordField", os.getenv("ERP_PASSWORD"))
+            page.fill("input#usernameField",(ERP_USERNAME))
+            page.fill("input#passwordField",(ERP_PASSWORD))
             safe_click(page, "button:has-text('Log In')")
             print("[✓] Logged into ERP system")
             page.wait_for_load_state("networkidle", timeout=30000)
