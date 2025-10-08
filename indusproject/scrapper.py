@@ -172,7 +172,7 @@ def go_to_orders_page(page):
         return False
 
 # ================= COLLECT POs WITH PAGINATION =================
-def collect_non_zero_po_numbers(page, max_pages=5):
+def collect_non_zero_po_numbers(page, max_pages=7):
     po_list = []
     current_page = 1
 
@@ -241,7 +241,7 @@ def collect_rev0_po_numbers(page, max_pages=3):
 
     return po_list
 
-def find_po_in_pages(page, po_number, max_pages=6, retries=2):
+def find_po_in_pages(page, po_number, max_pages=7, retries=2):
     attempt = 0
     while attempt < retries:
         current_page = 1
