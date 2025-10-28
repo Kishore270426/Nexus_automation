@@ -49,3 +49,7 @@ def update_job_schedule(job_id, hour, minute):
     except Exception as e:
         print(f"[Scheduler Error] {str(e)}")
         return f"Error updating job: {str(e)}"
+
+
+if __name__ == "__main__":
+    scheduler.start()
