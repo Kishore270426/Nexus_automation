@@ -127,7 +127,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
-STATIC_API_TOKEN = "0fad0954-ff69-42ff-bf53-6f12bee5da6f"
+
 
 
 # Default primary key field type
