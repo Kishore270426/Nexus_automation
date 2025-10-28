@@ -1,18 +1,19 @@
-from apscheduler.schedulers.blocking import BlockingScheduler
-from indusproject.scrapper import scrape_indus_po_data
-from indusproject.status_scrapper import scrape_and_store_in_redis
-from apscheduler.triggers.cron import CronTrigger
+# scheduler.py
 import os
 import django
+from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.triggers.cron import CronTrigger
+from indusproject.scrapper import scrape_indus_po_data
+from indusproject.status_scrapper import scrape_and_store_in_redis
 
-# Django setup
+# -------------------- Django setup --------------------
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'indusproject.settings')
 django.setup()
 
-# Use BlockingScheduler so the process stays alive
+# -------------------- Scheduler setup --------------------
 scheduler = BlockingScheduler()
 
-# Define jobs
+# -------------------- Add Jobs --------------------
 scheduler.add_job(
     scrape_indus_po_data,
     trigger=CronTrigger(hour=13, minute=8),
@@ -29,20 +30,37 @@ scheduler.add_job(
     replace_existing=True
 )
 
-# Optional: function to dynamically update jobs
-def update_job_schedule(job_id, hour, minute):
+# -------------------- Function to update job times dynamically --------------------
+def update_job_schedule(job_id: str, hour: int, minute: int):
+    """
+    Update the schedule time of an existing job.
+    
+    Args:
+        job_id: ID of the job to update
+        hour: New hour (0-23)
+        minute: New minute (0-59)
+    Returns:
+        Status message
+    """
     try:
         job = scheduler.get_job(job_id)
         if not job:
             return f"No job found with id: {job_id}"
-        job.reschedule(trigger=CronTrigger(hour=hour, minute=minute))
-        print(f"[Scheduler] Updated {job_id} to run at {hour}:{minute}")
-        return f"Updated {job_id} to run at {hour}:{minute}"
+
+        # Create a new CronTrigger with the updated time
+        new_trigger = CronTrigger(hour=hour, minute=minute)
+        job.reschedule(trigger=new_trigger)
+
+        print(f"[Scheduler] Updated job '{job_id}' to run at {hour:02d}:{minute:02d}")
+        return f"Updated job '{job_id}' to run at {hour:02d}:{minute:02d}"
     except Exception as e:
         print(f"[Scheduler Error] {str(e)}")
-        return f"Error updating job: {str(e)}"
+        return f"Error updating job '{job_id}': {str(e)}"
 
-# Run scheduler
+# -------------------- Start Scheduler --------------------
 if __name__ == "__main__":
-    print("[Scheduler] Starting scheduler...")
-    scheduler.start()
+    print("[Scheduler] Starting APScheduler...")
+    try:
+        scheduler.start()
+    except (KeyboardInterrupt, SystemExit):
+        print("[Scheduler] Stopped manually")
