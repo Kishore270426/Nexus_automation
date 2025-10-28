@@ -128,7 +128,7 @@ STATIC_URL = 'static/'
 
 
 
-
+STATIC_API_TOKEN='0fad0954-ff69-42ff-bf53-6f12bee5da6f'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

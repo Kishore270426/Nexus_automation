@@ -141,6 +141,7 @@ from indusproject.scheduler import update_job_schedule
 @api_view(['POST'])
 @authentication_classes([])  # remove if you use authentication
 @permission_classes([])      # remove if you use authentication
+@token_required
 def update_cron_time(request):
     """
     Update cron time for a scheduled job.
