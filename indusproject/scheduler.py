@@ -1,4 +1,3 @@
-# scheduler.py
 import os
 import django
 from apscheduler.schedulers.blocking import BlockingScheduler
@@ -32,22 +31,11 @@ scheduler.add_job(
 
 # -------------------- Function to update job times dynamically --------------------
 def update_job_schedule(job_id: str, hour: int, minute: int):
-    """
-    Update the schedule time of an existing job.
-    
-    Args:
-        job_id: ID of the job to update
-        hour: New hour (0-23)
-        minute: New minute (0-59)
-    Returns:
-        Status message
-    """
     try:
         job = scheduler.get_job(job_id)
         if not job:
             return f"No job found with id: {job_id}"
 
-        # Create a new CronTrigger with the updated time
         new_trigger = CronTrigger(hour=hour, minute=minute)
         job.reschedule(trigger=new_trigger)
 
