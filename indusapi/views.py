@@ -1,5 +1,5 @@
 # indus_api/views.py
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 import os, json
 from redis import Redis
@@ -13,6 +13,9 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import status
+from indusproject.scheduler import update_job_schedule
+from .utils import token_required
+
 
 
 
@@ -24,35 +27,36 @@ redis_client = Redis(
 )
 
 @api_view(['POST'])
+@authentication_classes([])  # Disable default DRF auth for this endpoint
+@permission_classes([]) 
+@token_required
 def get_po_data(request):
-    body = json.loads(request.body)
-    username = body.get("username")
-    password = body.get("password")
-
-    if not username or not password:
-            return JsonResponse({"response": "error", "message": "Username and password required"}, status=401)
-    
-    user = authenticate(request, username=username, password=password)
-    if user is None:
-        return JsonResponse({"response": "error", "message": "Invalid credentials"}, status=401)
-
-
-    data = redis_client.get("indus_latest_data")
-    if data:
-        records = json.loads(data)
+    """
+    Get PO data from Redis if token is valid. 
+    Username/password are no longer checked.
+    """
+    try:
+        data = redis_client.get("indus_po_data")
+        if data:
+            records = json.loads(data)
+            return Response({
+                "status": "success",
+                "records": len(records),
+                "data": records
+            })
         return Response({
-            "status": "success",
-            "records": len(records),
-            "data": records
+            "status": "error",
+            "message": "No data available. Please try again later."
         })
-    return Response({
-        "status": "error",
-        "message": "No data available. Please try again later."
-    })
+    except Exception as e:
+        return Response({"status": "error", "message": str(e)}, status=500)
 
 
 
-@api_view(["POST"])
+@api_view(['POST'])
+@authentication_classes([])  # Disable default DRF auth for this endpoint
+@permission_classes([]) 
+@token_required
 def bulk_scrape(request):
     try:
         # Step 1: Parse JSON body
@@ -61,19 +65,6 @@ def bulk_scrape(request):
         except json.JSONDecodeError:
             return JsonResponse({"response": "error", "message": "Invalid JSON payload"}, status=400)
 
-        username = body.get("username")
-        password = body.get("password")
-
-        if not username or not password:
-            return JsonResponse({"response": "error", "message": "Username and password required"}, status=401)
-
-        # Step 2: Authenticate user
-        user = authenticate(request, username=username, password=password)
-        if user is None:
-            return JsonResponse({"response": "error", "message": "Invalid credentials"}, status=401)
-
-
-        # Step 4: Proceed with the logic after authentication
         po_numbers = body.get("po_numbers", [])
         if not isinstance(po_numbers, list):
             return JsonResponse({"response": "error", "message": "'po_numbers' must be a list"}, status=400)
@@ -105,42 +96,72 @@ def bulk_scrape(request):
     except Exception as e:
         return JsonResponse({"response": "error", "message": f"Server error: {str(e)}"}, status=500)
     
-@api_view(["POST"])
-def change_credentials(request):
+@api_view(['POST'])
+@authentication_classes([])  # Disable default DRF auth for this endpoint
+@permission_classes([]) 
+@token_required
+def update_erp_password(request):
     try:
-        body = json.loads(request.body)
-    except Exception:
-        return JsonResponse({"response": "error", "message": "Invalid request body"}, status=400)
+        new_password = request.data.get("new_password")
+        if not new_password:
+            return Response({"error": "Password not provided"}, status=400)
 
-    username = body.get("username")
-    old_password = body.get("old_password")
-    new_password = body.get("new_password")
-    new_username = body.get("new_username")  # keep separate from current username
+        # Absolute path to credentials.py
+        credentials_path = r"C:\Indus_project\indusproject\indusproject\credentials.py"
 
-    # Step 1: Authenticate user with current credentials
-    user = authenticate(request, username=username, password=old_password)
-    if user is None:
-        return JsonResponse({"response": "error", "message": "Invalid username or password"}, status=401)
+        if not os.path.exists(credentials_path):
+            return Response({"error": f"credentials.py not found at {credentials_path}"}, status=404)
 
-    # Step 2: Update username if provided
-    if new_username:
-        if User.objects.filter(username=new_username).exists():
-            return JsonResponse({"response": "error", "message": "New username already taken"}, status=400)
-        user.username = new_username
+        # Read the file
+        with open(credentials_path, "r") as file:
+            lines = file.readlines()
 
-    # Step 3: Update password if provided
-    if new_password:
-        try:
-            validate_password(new_password, user)
-            user.set_password(new_password)
-        except Exception as e:
-            return JsonResponse({"response": "error", "message": str(e)}, status=400)
+        # Modify only the ERP_PASSWORD line
+        with open(credentials_path, "w") as file:
+            for line in lines:
+                if line.strip().startswith("ERP_PASSWORD"):
+                    file.write(f'ERP_PASSWORD = "{new_password}"\n')
+                else:
+                    file.write(line)
 
-    user.save()
+        return Response({
+            "message": f"ERP password updated successfully to '{new_password}'",
+            "file_location": credentials_path
+        }, status=200)
+
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
 
 
-    return Response({
-        "status": "success",
-        "message": "Credentials updated successfully",
+@api_view(['POST'])
+@authentication_classes([])  # Disable default DRF auth for this endpoint
+@permission_classes([]) 
+@token_required
+def update_cron_time(request):
 
-    }, status=status.HTTP_200_OK)
+    
+    """
+    Endpoint to update the cron time of a scheduled job.
+    Example POST body:
+    {
+        "job_id": "indus_po_scraper",
+        "hour": 14,
+        "minute": 30
+    }
+    """
+    try:
+        job_id = request.data.get('job_id')
+        hour = int(request.data.get('hour'))
+        minute = int(request.data.get('minute'))
+
+        if job_id not in ['indus_po_scraper', 'scrape_and_store_in_redis']:
+            return Response({"error": "Invalid job_id"}, status=400)
+
+        result = update_job_schedule(job_id, hour, minute)
+        return Response({
+                "job_id": job_id,
+                "hour": hour,
+                "minute": minute
+                }, status=200)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)

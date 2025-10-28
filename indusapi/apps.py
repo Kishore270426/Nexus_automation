@@ -7,9 +7,7 @@ class IndusScraperConfig(AppConfig):
     name = 'indusapi'
 
     def ready(self):
-        # Prevent double execution by checking for RUN_MAIN
         if os.environ.get('RUN_MAIN') != 'true':
             return
         print("[AppConfig] Starting scheduler")
-        
-        start_scheduler()
+        start_scheduler()  # now non-blocking

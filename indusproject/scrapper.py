@@ -2,6 +2,7 @@ import os, json, datetime
 from dotenv import load_dotenv
 from playwright.sync_api import sync_playwright, TimeoutError
 from redis import Redis
+from .credentials import *
 
 load_dotenv()
 
@@ -95,70 +96,65 @@ def group_items_by_indus_id(items):
         return []
 
 # ================= SCRAPING HELPERS =================
-def scrape_po_details(page, po_number):
-    try:
-        page.wait_for_selector("tbody tr", timeout=60000)
-        items, column_mapping = [], {}
-        rows = page.query_selector_all("tbody tr")
+def scrape_po_details(page, po_number, retries=3):
+    attempt = 0
+    while attempt < retries:
+        try:
+            if not wait_for_selector_retry(page, "tbody tr", timeout=60000, retries=retries):
+                raise TimeoutError(f"Table not loaded for PO {po_number}")
 
-        # Build column map
-        for row in rows:
-            headers = row.query_selector_all("th")
-            if headers:
+            items, column_mapping = [], {}
+            rows = page.query_selector_all("tbody tr")
+
+            # Build column map
+            for row in rows:
+                headers = row.query_selector_all("th")
+                if headers:
+                    for idx, header in enumerate(headers):
+                        column_mapping[header.inner_text().strip()] = idx
+                    break
+
+            if not column_mapping:
+                headers = page.query_selector_all("thead th, table th")
                 for idx, header in enumerate(headers):
                     column_mapping[header.inner_text().strip()] = idx
-                break
 
-        if not column_mapping:
-            headers = page.query_selector_all("thead th, table th")
-            for idx, header in enumerate(headers):
-                column_mapping[header.inner_text().strip()] = idx
-
-        # Parse rows
-        for row in rows:
-            cells = row.query_selector_all("td")
-            if len(cells) < 10:
-                continue
-            try:
-                line = cells[column_mapping.get("Line", 2)].inner_text().strip()
-                if not line or not line.isdigit():
+            # Parse rows
+            for row in rows:
+                cells = row.query_selector_all("td")
+                if len(cells) < 10:
                     continue
-                item_job = cells[column_mapping.get("Item/Job", 4)].inner_text().strip()
-                description = cells[column_mapping.get("Description", 6)].inner_text().strip()
-                qty = cells[column_mapping.get("Qty", 8)].inner_text().strip()
-                price = cells[column_mapping.get("Price", 9)].inner_text().strip()
-                indus_id = cells[column_mapping.get("Site ID", 25)].inner_text().strip() if 25 < len(cells) else ''
-                project_id = cells[column_mapping.get("Project Name", 27)].inner_text().strip() if 27 < len(cells) else ''
-                items.append({
-                    "line": line,
-                    "item_job": item_job,
-                    "description": description,
-                    "qty": qty,
-                    "price": price,
-                    "project_id": project_id,
-                    "indus_id": indus_id
-                })
-            except Exception as e:
-                print(f"[WARNING] Error parsing row in PO {po_number}: {e}")
-        return items
-    except TimeoutError:
-        print(f"[TIMEOUT] Table not loaded for PO {po_number}")
-        return []
-    except Exception as e:
-        print(f"[ERROR] Failed to scrape PO {po_number}: {e}")
-        return []
+                try:
+                    line = cells[column_mapping.get("Line", 2)].inner_text().strip()
+                    if not line or not line.isdigit():
+                        continue
+                    item_job = cells[column_mapping.get("Item/Job", 4)].inner_text().strip()
+                    description = cells[column_mapping.get("Description", 6)].inner_text().strip()
+                    qty = cells[column_mapping.get("Qty", 8)].inner_text().strip()
+                    price = cells[column_mapping.get("Price", 9)].inner_text().strip()
+                    indus_id = cells[column_mapping.get("Site ID", 25)].inner_text().strip() if 25 < len(cells) else ''
+                    project_id = cells[column_mapping.get("Project Name", 27)].inner_text().strip() if 27 < len(cells) else ''
+                    items.append({
+                        "line": line,
+                        "item_job": item_job,
+                        "description": description,
+                        "qty": qty,
+                        "price": price,
+                        "project_id": project_id,
+                        "indus_id": indus_id
+                    })
+                except Exception as e:
+                    print(f"[WARNING] Error parsing row in PO {po_number}: {e}")
+            return items
+        except TimeoutError:
+            attempt += 1
+            print(f"[TIMEOUT] Table not loaded for PO {po_number}. Retry {attempt}/{retries}")
+            page.reload()
+            page.wait_for_load_state("networkidle", timeout=30000)
+    print(f"[ERROR] Failed to load table for PO {po_number} after {retries} retries")
+    return []
 
-# ================= SAFE NAVIGATION =================
-def safe_click(page, selector, timeout=30000, wait_for_load=True):
-    try:
-        page.wait_for_selector(selector, timeout=timeout)
-        page.click(selector)
-        if wait_for_load:
-            page.wait_for_load_state("networkidle", timeout=timeout)
-        return True
-    except TimeoutError:
-        print(f"[WARNING] Timeout while waiting for {selector}")
-        return False
+
 
 def go_to_orders_page(page):
     if not safe_click(page, "a:has-text('Orders')"):
@@ -172,7 +168,7 @@ def go_to_orders_page(page):
         return False
 
 # ================= COLLECT POs WITH PAGINATION =================
-def collect_non_zero_po_numbers(page, max_pages=7):
+def collect_non_zero_po_numbers(page, max_pages=1):
     po_list = []
     current_page = 1
 
@@ -196,14 +192,15 @@ def collect_non_zero_po_numbers(page, max_pages=7):
 
         next_button = page.query_selector("a:has-text('Next')")
         if next_button and "disabled" not in (next_button.get_attribute("class") or "").lower():
-            page.click("a:has-text('Next')")
-            page.wait_for_load_state("networkidle", timeout=30000)
+            if not safe_click(page, "a:has-text('Next')", retries=3):
+                print("[WARNING] Could not click Next button. Stopping pagination.")
+                break
             current_page += 1
             continue
         break
     return po_list
 
-def collect_rev0_po_numbers(page, max_pages=3):
+def collect_rev0_po_numbers(page, max_pages=1):
     po_list = []
 
     # Navigate to PO history and advanced search
@@ -233,15 +230,17 @@ def collect_rev0_po_numbers(page, max_pages=3):
 
         next_button = page.query_selector("a:has-text('Next')")
         if next_button and "disabled" not in (next_button.get_attribute("class") or "").lower():
-            page.click("a:has-text('Next')")
-            page.wait_for_load_state("networkidle", timeout=30000)
+            if not safe_click(page, "a:has-text('Next')", retries=3):
+                print("[WARNING] Could not click Next button. Stopping pagination.")
+                break
             current_page += 1
             continue
         break
 
     return po_list
 
-def find_po_in_pages(page, po_number, max_pages=7, retries=2):
+
+def find_po_in_pages(page, po_number, max_pages=20, retries=3):
     attempt = 0
     while attempt < retries:
         current_page = 1
@@ -253,8 +252,9 @@ def find_po_in_pages(page, po_number, max_pages=7, retries=2):
             except TimeoutError:
                 next_button = page.query_selector("a:has-text('Next')")
                 if next_button and "disabled" not in (next_button.get_attribute("class") or "").lower():
-                    page.click("a:has-text('Next')")
-                    page.wait_for_load_state("networkidle", timeout=30000)
+                    if not safe_click(page, "a:has-text('Next')", retries=3):
+                        print("[WARNING] Could not click Next button while searching for PO.")
+                        break
                     current_page += 1
                     continue
                 break
@@ -263,18 +263,53 @@ def find_po_in_pages(page, po_number, max_pages=7, retries=2):
         page.wait_for_load_state("networkidle", timeout=30000)
     return None
 
+
+# ================= SAFE NAVIGATION WITH RETRY =================
+def safe_click(page, selector, timeout=30000, wait_for_load=True, retries=3):
+    attempt = 0
+    while attempt < retries:
+        try:
+            page.wait_for_selector(selector, timeout=timeout)
+            page.click(selector)
+            if wait_for_load:
+                page.wait_for_load_state("networkidle", timeout=timeout)
+            return True
+        except TimeoutError:
+            attempt += 1
+            print(f"[WARNING] Timeout while waiting for {selector}. Retry {attempt}/{retries}")
+            if attempt >= retries:
+                return False
+        except Exception as e:
+            print(f"[ERROR] Failed to click {selector}: {e}")
+            return False
+
+# ================= WAIT FOR SELECTOR WITH RETRY =================
+def wait_for_selector_retry(page, selector, timeout=30000, retries=3):
+    attempt = 0
+    while attempt < retries:
+        try:
+            page.wait_for_selector(selector, timeout=timeout)
+            return True
+        except TimeoutError:
+            attempt += 1
+            print(f"[WARNING] Timeout waiting for {selector}. Retry {attempt}/{retries}")
+            if attempt >= retries:
+                return False
+        except Exception as e:
+            print(f"[ERROR] Error waiting for {selector}: {e}")
+            return False
+
 # ================= MAIN SCRAPER =================
 def scrape_indus_po_data():
     result = []
-    ERP_LOGIN_URL = "https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp"
-    ERP_USERNAME = "bharathielectricalanna@gmail.com"
-    ERP_PASSWORD = "Jan.erp_2026"
+
     try:
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=False)
             context = browser.new_context()
             page = context.new_page()
             page.goto(ERP_LOGIN_URL)
+            ERP_PASSWOR = "Nexus.ERP_2026"
 
             # Login
             page.fill("input#usernameField",(ERP_USERNAME))
@@ -284,11 +319,11 @@ def scrape_indus_po_data():
             page.wait_for_load_state("networkidle", timeout=30000)
 
             # ========= STEP 1: Non-zero rev POs =========
-            print("[INFO] Collecting non-zero rev PO numbers...")
+            
             safe_click(page, "img[title='Expand']")
             safe_click(page, "li >> text=Home Page")
             safe_click(page, "a:has-text('Orders')")
-
+            print("[INFO] Collecting non-zero rev PO numbers...")
             non_zero_pos = collect_non_zero_po_numbers(page)
             print(f"[INFO] Found {len(non_zero_pos)} non-zero rev POs")
 

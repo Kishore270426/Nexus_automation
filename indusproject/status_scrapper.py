@@ -6,6 +6,7 @@ import json
 import redis
 from playwright.async_api import async_playwright
 from loguru import logger
+from .credentials import *
 
 # Setup logging
 logger.add("logs/app.log", rotation="5 MB", retention="7 days", level="INFO")
@@ -18,10 +19,11 @@ REDIS_KEY = "Po_status"
 
 redis_client = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
+
 class ScraperConfig:
-    email =  os.getenv("ERP_USERNAME")
-    password = os.getenv("ERP_PASSWORD")
-    base_url = (os.getenv("ERP_LOGIN_URL"))
+    email =  ERP_USERNAME
+    password = ERP_PASSWORD
+    base_url = ERP_LOGIN_URL
     max_pages = 5
     page_load_timeout = 15000
     navigation_timeout = 20000

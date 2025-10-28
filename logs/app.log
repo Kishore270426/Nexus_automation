@@ -6304,3 +6304,1506 @@ Traceback (most recent call last):
           └ <function rewrite_error at 0x00000241413B7740>
 
 Exception: Page.wait_for_selector: Connection closed while reading from the driver
+2025-10-09 12:40:48.108 | ERROR    | indusproject.status_scrapper:scrape_and_store_in_redis:111 - Error in scheduled Redis update: Page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("img[title='Expand']")
+
+Traceback (most recent call last):
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 995, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x000001B720B70400>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 27144)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x000001B720B700E0>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 27144)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(ThreadPoolExecutor-1_0, started daemon 27144)>
+    │    │        │    └ (<weakref at 0x000001B72667AC50; to 'ThreadPoolExecutor' at 0x000001B724D184D0>, <_queue.SimpleQueue object at 0x000001B724CF...
+    │    │        └ <Thread(ThreadPoolExecutor-1_0, started daemon 27144)>
+    │    └ <function _worker at 0x000001B721464E00>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 27144)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 83, in _worker
+    work_item.run()
+    │         └ <function _WorkItem.run at 0x000001B7214663E0>
+    └ <concurrent.futures.thread._WorkItem object at 0x000001B72666EFD0>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │    │   │    │       │    └ {}
+             │    │   │    │       └ <concurrent.futures.thread._WorkItem object at 0x000001B72666EFD0>
+             │    │   │    └ (<Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>, 'default', [datetime.datetime(2025, 10, 9, 1...
+             │    │   └ <concurrent.futures.thread._WorkItem object at 0x000001B72666EFD0>
+             │    └ <function run_job at 0x000001B7242FBCE0>
+             └ <concurrent.futures.thread._WorkItem object at 0x000001B72666EFD0>
+  File "C:\Indus_project\env\Lib\site-packages\apscheduler\executors\base.py", line 131, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+             │   │     │   │       │   └ <member 'kwargs' of 'Job' objects>
+             │   │     │   │       └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+             │   │     │   └ <member 'args' of 'Job' objects>
+             │   │     └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+             │   └ <member 'func' of 'Job' objects>
+             └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+
+> File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 104, in scrape_and_store_in_redis
+    result = asyncio.run(scraper.scrape_data())
+             │       │   │       └ <function POScraper.scrape_data at 0x000001B72495E700>
+             │       │   └ <indusproject.status_scrapper.POScraper object at 0x000001B7266CF7D0>
+             │       └ <function run at 0x000001B7206105E0>
+             └ <module 'asyncio' from 'C:\\Users\\Lenovo\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\asyncio\\__init__.py'>
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 190, in run
+    return runner.run(main)
+           │      │   └ <coroutine object POScraper.scrape_data at 0x000001B7269409D0>
+           │      └ <function Runner.run at 0x000001B7213B2DE0>
+           └ <asyncio.runners.Runner object at 0x000001B7266CF790>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │                        └ <Task finished name='Task-1' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\status...
+           │    └ None
+           └ <asyncio.runners.Runner object at 0x000001B7266CF790>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 653, in run_until_complete
+    return future.result()
+           │      └ <method 'result' of '_asyncio.Task' objects>
+           └ <Task finished name='Task-1' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\status...
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 73, in scrape_data
+    await self._navigate_to_orders(page)
+          │    │                   └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          │    └ <function POScraper._navigate_to_orders at 0x000001B72495E5C0>
+          └ <indusproject.status_scrapper.POScraper object at 0x000001B7266CF7D0>
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 44, in _navigate_to_orders
+    await page.click("img[title='Expand']")
+          │    └ <function Page.click at 0x000001B7248F5F80>
+          └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+
+  File "C:\Indus_project\env\Lib\site-packages\playwright\async_api\_generated.py", line 9861, in click
+    await self._impl_obj.click(
+          │    │         └ <function Page.click at 0x000001B72458DE40>
+          │    └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_page.py", line 859, in click
+    return await self._main_frame.click(**locals_to_params(locals()))
+                 │    │           │       └ <function locals_to_params at 0x000001B72443EF20>
+                 │    │           └ <function Frame.click at 0x000001B7245740E0>
+                 │    └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+                 └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_frame.py", line 521, in click
+    await self._channel.send("click", self._timeout, locals_to_params(locals()))
+          │    │        │             │    │         └ <function locals_to_params at 0x000001B72443EF20>
+          │    │        │             │    └ <function Frame._timeout at 0x000001B72453F060>
+          │    │        │             └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          │    │        └ <function Channel.send at 0x000001B72443FA60>
+          │    └ <playwright._impl._connection.Channel object at 0x000001B726663490>
+          └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+                 │    │           └ <function Connection.wrap_api_call at 0x000001B7244B99E0>
+                 │    └ <playwright._impl._connection.Connection object at 0x000001B72694BF90>
+                 └ <playwright._impl._connection.Channel object at 0x000001B726663490>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 558, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+          └ <function rewrite_error at 0x000001B7243DD260>
+
+playwright._impl._errors.TimeoutError: Page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("img[title='Expand']")
+
+2025-10-10 12:40:18.023 | INFO     | indusproject.status_scrapper:_scrape_page:52 - 📄 Scraping page 1...
+2025-10-10 12:40:18.691 | INFO     | indusproject.status_scrapper:_scrape_page:64 - ✅ Finished scraping page 1, total records: 25
+2025-10-10 12:40:18.721 | INFO     | indusproject.status_scrapper:scrape_data:83 - ➡️ Moving to page 2
+2025-10-10 12:40:23.800 | INFO     | indusproject.status_scrapper:_scrape_page:52 - 📄 Scraping page 2...
+2025-10-10 12:40:24.646 | INFO     | indusproject.status_scrapper:_scrape_page:64 - ✅ Finished scraping page 2, total records: 50
+2025-10-10 12:40:24.660 | INFO     | indusproject.status_scrapper:scrape_data:83 - ➡️ Moving to page 3
+2025-10-10 12:40:29.706 | INFO     | indusproject.status_scrapper:_scrape_page:52 - 📄 Scraping page 3...
+2025-10-10 12:40:30.340 | INFO     | indusproject.status_scrapper:_scrape_page:64 - ✅ Finished scraping page 3, total records: 75
+2025-10-10 12:40:30.351 | INFO     | indusproject.status_scrapper:scrape_data:83 - ➡️ Moving to page 4
+2025-10-10 12:40:35.378 | INFO     | indusproject.status_scrapper:_scrape_page:52 - 📄 Scraping page 4...
+2025-10-10 12:40:35.987 | INFO     | indusproject.status_scrapper:_scrape_page:64 - ✅ Finished scraping page 4, total records: 100
+2025-10-10 12:40:36.027 | INFO     | indusproject.status_scrapper:scrape_data:83 - ➡️ Moving to page 5
+2025-10-10 12:40:41.067 | INFO     | indusproject.status_scrapper:_scrape_page:52 - 📄 Scraping page 5...
+2025-10-10 12:40:41.972 | INFO     | indusproject.status_scrapper:_scrape_page:64 - ✅ Finished scraping page 5, total records: 125
+2025-10-10 12:40:41.985 | INFO     | indusproject.status_scrapper:scrape_data:83 - ➡️ Moving to page 6
+2025-10-10 12:40:47.021 | INFO     | indusproject.status_scrapper:_scrape_page:52 - 📄 Scraping page 6...
+2025-10-10 12:40:47.660 | INFO     | indusproject.status_scrapper:_scrape_page:64 - ✅ Finished scraping page 6, total records: 150
+2025-10-10 12:40:47.678 | INFO     | indusproject.status_scrapper:scrape_data:83 - ➡️ Moving to page 7
+2025-10-10 12:40:52.723 | INFO     | indusproject.status_scrapper:_scrape_page:52 - 📄 Scraping page 7...
+2025-10-10 12:40:53.540 | INFO     | indusproject.status_scrapper:_scrape_page:64 - ✅ Finished scraping page 7, total records: 175
+2025-10-10 12:40:53.557 | INFO     | indusproject.status_scrapper:scrape_data:83 - ➡️ Moving to page 8
+2025-10-10 12:40:58.600 | INFO     | indusproject.status_scrapper:_scrape_page:52 - 📄 Scraping page 8...
+2025-10-10 12:40:58.600 | ERROR    | indusproject.status_scrapper:scrape_and_store_in_redis:111 - Error in scheduled Redis update: Page.wait_for_selector: Connection closed while reading from the driver
+Traceback (most recent call last):
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 995, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x00000260BE670400>
+    └ <Thread(ThreadPoolExecutor-1_1, started daemon 12736)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x00000260BE6700E0>
+    └ <Thread(ThreadPoolExecutor-1_1, started daemon 12736)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(ThreadPoolExecutor-1_1, started daemon 12736)>
+    │    │        │    └ (<weakref at 0x00000260C734D1C0; to 'ThreadPoolExecutor' at 0x00000260C276CA50>, <_queue.SimpleQueue object at 0x00000260C274...
+    │    │        └ <Thread(ThreadPoolExecutor-1_1, started daemon 12736)>
+    │    └ <function _worker at 0x00000260BEEF4E00>
+    └ <Thread(ThreadPoolExecutor-1_1, started daemon 12736)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 83, in _worker
+    work_item.run()
+    │         └ <function _WorkItem.run at 0x00000260BEEF63E0>
+    └ <concurrent.futures.thread._WorkItem object at 0x00000260C73549D0>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │    │   │    │       │    └ {}
+             │    │   │    │       └ <concurrent.futures.thread._WorkItem object at 0x00000260C73549D0>
+             │    │   │    └ (<Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>, 'default', [datetime.datetime(2025, 10, 10, ...
+             │    │   └ <concurrent.futures.thread._WorkItem object at 0x00000260C73549D0>
+             │    └ <function run_job at 0x00000260C1D4BC40>
+             └ <concurrent.futures.thread._WorkItem object at 0x00000260C73549D0>
+  File "C:\Indus_project\env\Lib\site-packages\apscheduler\executors\base.py", line 131, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+             │   │     │   │       │   └ <member 'kwargs' of 'Job' objects>
+             │   │     │   │       └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+             │   │     │   └ <member 'args' of 'Job' objects>
+             │   │     └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+             │   └ <member 'func' of 'Job' objects>
+             └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+
+> File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 104, in scrape_and_store_in_redis
+    result = asyncio.run(scraper.scrape_data())
+             │       │   │       └ <function POScraper.scrape_data at 0x00000260C23B6660>
+             │       │   └ <indusproject.status_scrapper.POScraper object at 0x00000260C7346E10>
+             │       └ <function run at 0x00000260BE0705E0>
+             └ <module 'asyncio' from 'C:\\Users\\Lenovo\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\asyncio\\__init__.py'>
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 190, in run
+    return runner.run(main)
+           │      │   └ <coroutine object POScraper.scrape_data at 0x00000260C7202DF0>
+           │      └ <function Runner.run at 0x00000260BEE42DE0>
+           └ <asyncio.runners.Runner object at 0x00000260C7347D90>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │                        └ <Task finished name='Task-1557' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\sta...
+           │    └ None
+           └ <asyncio.runners.Runner object at 0x00000260C7347D90>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 653, in run_until_complete
+    return future.result()
+           │      └ <method 'result' of '_asyncio.Task' objects>
+           └ <Task finished name='Task-1557' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\sta...
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 77, in scrape_data
+    await self._scrape_page(page, page_number)
+          │    │            │     └ 8
+          │    │            └ <Page url='https://induserp.industowers.com/OA_HTML/OA.jsp?page=/oracle/apps/pos/orders/webui/PosVpoMainPG&_ri=177&retainAM=Y...
+          │    └ <function POScraper._scrape_page at 0x00000260C23B65C0>
+          └ <indusproject.status_scrapper.POScraper object at 0x00000260C7346E10>
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 53, in _scrape_page
+    await page.wait_for_selector("span#ResultRN1 table tbody tr", timeout=self.config.page_load_timeout)
+          │    │                                                          │    │      └ 15000
+          │    │                                                          │    └ <indusproject.status_scrapper.ScraperConfig object at 0x00000260C7347750>
+          │    │                                                          └ <indusproject.status_scrapper.POScraper object at 0x00000260C7346E10>
+          │    └ <function Page.wait_for_selector at 0x00000260C2344540>
+          └ <Page url='https://induserp.industowers.com/OA_HTML/OA.jsp?page=/oracle/apps/pos/orders/webui/PosVpoMainPG&_ri=177&retainAM=Y...
+
+  File "C:\Indus_project\env\Lib\site-packages\playwright\async_api\_generated.py", line 8164, in wait_for_selector
+    await self._impl_obj.wait_for_selector(
+          │    │         └ <function Page.wait_for_selector at 0x00000260C1FD8040>
+          │    └ <Page url='https://induserp.industowers.com/OA_HTML/OA.jsp?page=/oracle/apps/pos/orders/webui/PosVpoMainPG&_ri=177&retainAM=Y...
+          └ <Page url='https://induserp.industowers.com/OA_HTML/OA.jsp?page=/oracle/apps/pos/orders/webui/PosVpoMainPG&_ri=177&retainAM=Y...
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_page.py", line 425, in wait_for_selector
+    return await self._main_frame.wait_for_selector(**locals_to_params(locals()))
+                 │    │           │                   └ <function locals_to_params at 0x00000260C1E92DE0>
+                 │    │           └ <function Frame.wait_for_selector at 0x00000260C1F93380>
+                 │    └ <Frame name= url='https://induserp.industowers.com/OA_HTML/OA.jsp?page=/oracle/apps/pos/orders/webui/PosVpoMainPG&_ri=177&ret...
+                 └ <Page url='https://induserp.industowers.com/OA_HTML/OA.jsp?page=/oracle/apps/pos/orders/webui/PosVpoMainPG&_ri=177&retainAM=Y...
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_frame.py", line 341, in wait_for_selector
+    await self._channel.send(
+          │    │        └ <function Channel.send at 0x00000260C1E93920>
+          │    └ <playwright._impl._connection.Channel object at 0x00000260C742DB50>
+          └ <Frame name= url='https://induserp.industowers.com/OA_HTML/OA.jsp?page=/oracle/apps/pos/orders/webui/PosVpoMainPG&_ri=177&ret...
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+                 │    │           └ <function Connection.wrap_api_call at 0x00000260C1F098A0>
+                 │    └ <playwright._impl._connection.Connection object at 0x00000260C7347050>
+                 └ <playwright._impl._connection.Channel object at 0x00000260C742DB50>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 558, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+          └ <function rewrite_error at 0x00000260C1E2D120>
+
+Exception: Page.wait_for_selector: Connection closed while reading from the driver
+2025-10-13 12:40:47.271 | ERROR    | indusproject.status_scrapper:scrape_and_store_in_redis:113 - Error in scheduled Redis update: Page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("img[title='Expand']")
+
+Traceback (most recent call last):
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 995, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x0000023E1DD80400>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 5672)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x0000023E1DD800E0>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 5672)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(ThreadPoolExecutor-1_0, started daemon 5672)>
+    │    │        │    └ (<weakref at 0x0000023E237281D0; to 'ThreadPoolExecutor' at 0x0000023E21E3C3D0>, <_queue.SimpleQueue object at 0x0000023E2139...
+    │    │        └ <Thread(ThreadPoolExecutor-1_0, started daemon 5672)>
+    │    └ <function _worker at 0x0000023E1E604E00>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 5672)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 83, in _worker
+    work_item.run()
+    │         └ <function _WorkItem.run at 0x0000023E1E6063E0>
+    └ <concurrent.futures.thread._WorkItem object at 0x0000023E2378A710>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │    │   │    │       │    └ {}
+             │    │   │    │       └ <concurrent.futures.thread._WorkItem object at 0x0000023E2378A710>
+             │    │   │    └ (<Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>, 'default', [datetime.datetime(2025, 10, 13, ...
+             │    │   └ <concurrent.futures.thread._WorkItem object at 0x0000023E2378A710>
+             │    └ <function run_job at 0x0000023E2141BC40>
+             └ <concurrent.futures.thread._WorkItem object at 0x0000023E2378A710>
+  File "C:\Indus_project\env\Lib\site-packages\apscheduler\executors\base.py", line 131, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+             │   │     │   │       │   └ <member 'kwargs' of 'Job' objects>
+             │   │     │   │       └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+             │   │     │   └ <member 'args' of 'Job' objects>
+             │   │     └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+             │   └ <member 'func' of 'Job' objects>
+             └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+
+> File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 106, in scrape_and_store_in_redis
+    result = asyncio.run(scraper.scrape_data())
+             │       │   │       └ <function POScraper.scrape_data at 0x0000023E21A82700>
+             │       │   └ <indusproject.status_scrapper.POScraper object at 0x0000023E23624E50>
+             │       └ <function run at 0x0000023E1D8305E0>
+             └ <module 'asyncio' from 'C:\\Users\\Lenovo\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\asyncio\\__init__.py'>
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 190, in run
+    return runner.run(main)
+           │      │   └ <coroutine object POScraper.scrape_data at 0x0000023E23124150>
+           │      └ <function Runner.run at 0x0000023E1E552DE0>
+           └ <asyncio.runners.Runner object at 0x0000023E23624F50>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │                        └ <Task finished name='Task-1' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\status...
+           │    └ None
+           └ <asyncio.runners.Runner object at 0x0000023E23624F50>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 653, in run_until_complete
+    return future.result()
+           │      └ <method 'result' of '_asyncio.Task' objects>
+           └ <Task finished name='Task-1' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\status...
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 75, in scrape_data
+    await self._navigate_to_orders(page)
+          │    │                   └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          │    └ <function POScraper._navigate_to_orders at 0x0000023E21A825C0>
+          └ <indusproject.status_scrapper.POScraper object at 0x0000023E23624E50>
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 46, in _navigate_to_orders
+    await page.click("img[title='Expand']")
+          │    └ <function Page.click at 0x0000023E21A15F80>
+          └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+
+  File "C:\Indus_project\env\Lib\site-packages\playwright\async_api\_generated.py", line 9861, in click
+    await self._impl_obj.click(
+          │    │         └ <function Page.click at 0x0000023E216A9DA0>
+          │    └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_page.py", line 859, in click
+    return await self._main_frame.click(**locals_to_params(locals()))
+                 │    │           │       └ <function locals_to_params at 0x0000023E21562E80>
+                 │    │           └ <function Frame.click at 0x0000023E21698040>
+                 │    └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+                 └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_frame.py", line 521, in click
+    await self._channel.send("click", self._timeout, locals_to_params(locals()))
+          │    │        │             │    │         └ <function locals_to_params at 0x0000023E21562E80>
+          │    │        │             │    └ <function Frame._timeout at 0x0000023E21662FC0>
+          │    │        │             └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          │    │        └ <function Channel.send at 0x0000023E215639C0>
+          │    └ <playwright._impl._connection.Channel object at 0x0000023E23A714D0>
+          └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+                 │    │           └ <function Connection.wrap_api_call at 0x0000023E215D9940>
+                 │    └ <playwright._impl._connection.Connection object at 0x0000023E236136D0>
+                 └ <playwright._impl._connection.Channel object at 0x0000023E23A714D0>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 558, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+          └ <function rewrite_error at 0x0000023E214F91C0>
+
+playwright._impl._errors.TimeoutError: Page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("img[title='Expand']")
+
+2025-10-27 13:40:42.267 | ERROR    | indusproject.status_scrapper:scrape_and_store_in_redis:113 - Error in scheduled Redis update: Page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("img[title='Expand']")
+
+Traceback (most recent call last):
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 995, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x0000028573220400>
+    └ <Thread(ThreadPoolExecutor-1_1, started daemon 11932)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x00000285732200E0>
+    └ <Thread(ThreadPoolExecutor-1_1, started daemon 11932)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(ThreadPoolExecutor-1_1, started daemon 11932)>
+    │    │        │    └ (<weakref at 0x0000028516CCB510; to 'ThreadPoolExecutor' at 0x000002857736C510>, <_queue.SimpleQueue object at 0x000002857733...
+    │    │        └ <Thread(ThreadPoolExecutor-1_1, started daemon 11932)>
+    │    └ <function _worker at 0x0000028575144E00>
+    └ <Thread(ThreadPoolExecutor-1_1, started daemon 11932)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 83, in _worker
+    work_item.run()
+    │         └ <function _WorkItem.run at 0x00000285751463E0>
+    └ <concurrent.futures.thread._WorkItem object at 0x0000028516C28650>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │    │   │    │       │    └ {}
+             │    │   │    │       └ <concurrent.futures.thread._WorkItem object at 0x0000028516C28650>
+             │    │   │    └ (<Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>, 'default', [datetime.datetime(2025, 10, 27, ...
+             │    │   └ <concurrent.futures.thread._WorkItem object at 0x0000028516C28650>
+             │    └ <function run_job at 0x000002857697BBA0>
+             └ <concurrent.futures.thread._WorkItem object at 0x0000028516C28650>
+  File "C:\Indus_project\env\Lib\site-packages\apscheduler\executors\base.py", line 131, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+             │   │     │   │       │   └ <member 'kwargs' of 'Job' objects>
+             │   │     │   │       └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+             │   │     │   └ <member 'args' of 'Job' objects>
+             │   │     └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+             │   └ <member 'func' of 'Job' objects>
+             └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+
+> File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 106, in scrape_and_store_in_redis
+    result = asyncio.run(scraper.scrape_data())
+             │       │   │       └ <function POScraper.scrape_data at 0x0000028576FD6660>
+             │       │   └ <indusproject.status_scrapper.POScraper object at 0x0000028516C29050>
+             │       └ <function run at 0x0000028572CD05E0>
+             └ <module 'asyncio' from 'C:\\Users\\Lenovo\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\asyncio\\__init__.py'>
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 190, in run
+    return runner.run(main)
+           │      │   └ <coroutine object POScraper.scrape_data at 0x0000028516A01140>
+           │      └ <function Runner.run at 0x0000028575092DE0>
+           └ <asyncio.runners.Runner object at 0x0000028516C2B490>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │                        └ <Task finished name='Task-26283' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\st...
+           │    └ None
+           └ <asyncio.runners.Runner object at 0x0000028516C2B490>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 653, in run_until_complete
+    return future.result()
+           │      └ <method 'result' of '_asyncio.Task' objects>
+           └ <Task finished name='Task-26283' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\st...
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 75, in scrape_data
+    await self._navigate_to_orders(page)
+          │    │                   └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          │    └ <function POScraper._navigate_to_orders at 0x0000028576FD6520>
+          └ <indusproject.status_scrapper.POScraper object at 0x0000028516C29050>
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 46, in _navigate_to_orders
+    await page.click("img[title='Expand']")
+          │    └ <function Page.click at 0x0000028576F69EE0>
+          └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+
+  File "C:\Indus_project\env\Lib\site-packages\playwright\async_api\_generated.py", line 9861, in click
+    await self._impl_obj.click(
+          │    │         └ <function Page.click at 0x0000028576BF9D00>
+          │    └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_page.py", line 859, in click
+    return await self._main_frame.click(**locals_to_params(locals()))
+                 │    │           │       └ <function locals_to_params at 0x0000028576AC2DE0>
+                 │    │           └ <function Frame.click at 0x0000028576BB3F60>
+                 │    └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+                 └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_frame.py", line 521, in click
+    await self._channel.send("click", self._timeout, locals_to_params(locals()))
+          │    │        │             │    │         └ <function locals_to_params at 0x0000028576AC2DE0>
+          │    │        │             │    └ <function Frame._timeout at 0x0000028576BB2F20>
+          │    │        │             └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          │    │        └ <function Channel.send at 0x0000028576AC3920>
+          │    └ <playwright._impl._connection.Channel object at 0x0000028516EE9D50>
+          └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+                 │    │           └ <function Connection.wrap_api_call at 0x0000028576B398A0>
+                 │    └ <playwright._impl._connection.Connection object at 0x0000028516C2A5D0>
+                 └ <playwright._impl._connection.Channel object at 0x0000028516EE9D50>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 558, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+          └ <function rewrite_error at 0x0000028576A5D120>
+
+playwright._impl._errors.TimeoutError: Page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("img[title='Expand']")
+
+2025-10-27 15:17:41.640 | ERROR    | indusproject.status_scrapper:scrape_and_store_in_redis:116 - Error in scheduled Redis update: Page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("img[title='Expand']")
+
+Traceback (most recent call last):
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 995, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x000001A8A5D60400>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 23272)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x000001A8A5D600E0>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 23272)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(ThreadPoolExecutor-1_0, started daemon 23272)>
+    │    │        │    └ (<weakref at 0x000001A8AB781530; to 'ThreadPoolExecutor' at 0x000001A8A9EAC490>, <_queue.SimpleQueue object at 0x000001A8A9E7...
+    │    │        └ <Thread(ThreadPoolExecutor-1_0, started daemon 23272)>
+    │    └ <function _worker at 0x000001A8A7BB4E00>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 23272)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 83, in _worker
+    work_item.run()
+    │         └ <function _WorkItem.run at 0x000001A8A7BB63E0>
+    └ <concurrent.futures.thread._WorkItem object at 0x000001A8AB804090>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │    │   │    │       │    └ {}
+             │    │   │    │       └ <concurrent.futures.thread._WorkItem object at 0x000001A8AB804090>
+             │    │   │    └ (<Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>, 'default', [datetime.datetime(2025, 10, 27, ...
+             │    │   └ <concurrent.futures.thread._WorkItem object at 0x000001A8AB804090>
+             │    └ <function run_job at 0x000001A8A948BC40>
+             └ <concurrent.futures.thread._WorkItem object at 0x000001A8AB804090>
+  File "C:\Indus_project\env\Lib\site-packages\apscheduler\executors\base.py", line 131, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+             │   │     │   │       │   └ <member 'kwargs' of 'Job' objects>
+             │   │     │   │       └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+             │   │     │   └ <member 'args' of 'Job' objects>
+             │   │     └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+             │   └ <member 'func' of 'Job' objects>
+             └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+
+> File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 109, in scrape_and_store_in_redis
+    result = asyncio.run(scraper.scrape_data())
+             │       │   │       └ <function POScraper.scrape_data at 0x000001A8A9AF67A0>
+             │       │   └ <indusproject.status_scrapper.POScraper object at 0x000001A8AB805E10>
+             │       └ <function run at 0x000001A8A57905E0>
+             └ <module 'asyncio' from 'C:\\Users\\Lenovo\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\asyncio\\__init__.py'>
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 190, in run
+    return runner.run(main)
+           │      │   └ <coroutine object POScraper.scrape_data at 0x000001A8AA1C5580>
+           │      └ <function Runner.run at 0x000001A8A7B02DE0>
+           └ <asyncio.runners.Runner object at 0x000001A8AB807F50>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │                        └ <Task finished name='Task-1' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\status...
+           │    └ None
+           └ <asyncio.runners.Runner object at 0x000001A8AB807F50>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 653, in run_until_complete
+    return future.result()
+           │      └ <method 'result' of '_asyncio.Task' objects>
+           └ <Task finished name='Task-1' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\status...
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 75, in scrape_data
+    await self._navigate_to_orders(page)
+          │    │                   └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          │    └ <function POScraper._navigate_to_orders at 0x000001A8A9AF6660>
+          └ <indusproject.status_scrapper.POScraper object at 0x000001A8AB805E10>
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 47, in _navigate_to_orders
+    await page.click("img[title='Expand']")
+          │    └ <function Page.click at 0x000001A8A9A8A020>
+          └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+
+  File "C:\Indus_project\env\Lib\site-packages\playwright\async_api\_generated.py", line 9861, in click
+    await self._impl_obj.click(
+          │    │         └ <function Page.click at 0x000001A8A971DDA0>
+          │    └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_page.py", line 859, in click
+    return await self._main_frame.click(**locals_to_params(locals()))
+                 │    │           │       └ <function locals_to_params at 0x000001A8A95D2E80>
+                 │    │           └ <function Frame.click at 0x000001A8A9704040>
+                 │    └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+                 └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_frame.py", line 521, in click
+    await self._channel.send("click", self._timeout, locals_to_params(locals()))
+          │    │        │             │    │         └ <function locals_to_params at 0x000001A8A95D2E80>
+          │    │        │             │    └ <function Frame._timeout at 0x000001A8A96D2FC0>
+          │    │        │             └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          │    │        └ <function Channel.send at 0x000001A8A95D39C0>
+          │    └ <playwright._impl._connection.Channel object at 0x000001A8ABA72450>
+          └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+                 │    │           └ <function Connection.wrap_api_call at 0x000001A8A9649940>
+                 │    └ <playwright._impl._connection.Connection object at 0x000001A8AB804BD0>
+                 └ <playwright._impl._connection.Channel object at 0x000001A8ABA72450>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 558, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+          └ <function rewrite_error at 0x000001A8A956D1C0>
+
+playwright._impl._errors.TimeoutError: Page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("img[title='Expand']")
+
+2025-10-27 15:19:41.453 | ERROR    | indusproject.status_scrapper:scrape_and_store_in_redis:116 - Error in scheduled Redis update: Page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("img[title='Expand']")
+
+Traceback (most recent call last):
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 995, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x00000246A1010400>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 30532)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x00000246A10100E0>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 30532)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(ThreadPoolExecutor-1_0, started daemon 30532)>
+    │    │        │    └ (<weakref at 0x00000246A6A14CC0; to 'ThreadPoolExecutor' at 0x00000246A512C690>, <_queue.SimpleQueue object at 0x00000246A4F3...
+    │    │        └ <Thread(ThreadPoolExecutor-1_0, started daemon 30532)>
+    │    └ <function _worker at 0x00000246A2E34E00>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 30532)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 83, in _worker
+    work_item.run()
+    │         └ <function _WorkItem.run at 0x00000246A2E363E0>
+    └ <concurrent.futures.thread._WorkItem object at 0x00000246A6A997D0>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │    │   │    │       │    └ {}
+             │    │   │    │       └ <concurrent.futures.thread._WorkItem object at 0x00000246A6A997D0>
+             │    │   │    └ (<Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>, 'default', [datetime.datetime(2025, 10, 27, ...
+             │    │   └ <concurrent.futures.thread._WorkItem object at 0x00000246A6A997D0>
+             │    └ <function run_job at 0x00000246A470BC40>
+             └ <concurrent.futures.thread._WorkItem object at 0x00000246A6A997D0>
+  File "C:\Indus_project\env\Lib\site-packages\apscheduler\executors\base.py", line 131, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+             │   │     │   │       │   └ <member 'kwargs' of 'Job' objects>
+             │   │     │   │       └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+             │   │     │   └ <member 'args' of 'Job' objects>
+             │   │     └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+             │   └ <member 'func' of 'Job' objects>
+             └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+
+> File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 109, in scrape_and_store_in_redis
+    result = asyncio.run(scraper.scrape_data())
+             │       │   │       └ <function POScraper.scrape_data at 0x00000246A4D727A0>
+             │       │   └ <indusproject.status_scrapper.POScraper object at 0x00000246A6A99E90>
+             │       └ <function run at 0x00000246A0A105E0>
+             └ <module 'asyncio' from 'C:\\Users\\Lenovo\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\asyncio\\__init__.py'>
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 190, in run
+    return runner.run(main)
+           │      │   └ <coroutine object POScraper.scrape_data at 0x00000246A5448AE0>
+           │      └ <function Runner.run at 0x00000246A2D82DE0>
+           └ <asyncio.runners.Runner object at 0x00000246A6A99D90>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │                        └ <Task finished name='Task-1' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\status...
+           │    └ None
+           └ <asyncio.runners.Runner object at 0x00000246A6A99D90>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 653, in run_until_complete
+    return future.result()
+           │      └ <method 'result' of '_asyncio.Task' objects>
+           └ <Task finished name='Task-1' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\status...
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 75, in scrape_data
+    await self._navigate_to_orders(page)
+          │    │                   └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          │    └ <function POScraper._navigate_to_orders at 0x00000246A4D72660>
+          └ <indusproject.status_scrapper.POScraper object at 0x00000246A6A99E90>
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 47, in _navigate_to_orders
+    await page.click("img[title='Expand']")
+          │    └ <function Page.click at 0x00000246A4D0A020>
+          └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+
+  File "C:\Indus_project\env\Lib\site-packages\playwright\async_api\_generated.py", line 9861, in click
+    await self._impl_obj.click(
+          │    │         └ <function Page.click at 0x00000246A4999DA0>
+          │    └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_page.py", line 859, in click
+    return await self._main_frame.click(**locals_to_params(locals()))
+                 │    │           │       └ <function locals_to_params at 0x00000246A4852E80>
+                 │    │           └ <function Frame.click at 0x00000246A4984040>
+                 │    └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+                 └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_frame.py", line 521, in click
+    await self._channel.send("click", self._timeout, locals_to_params(locals()))
+          │    │        │             │    │         └ <function locals_to_params at 0x00000246A4852E80>
+          │    │        │             │    └ <function Frame._timeout at 0x00000246A4952FC0>
+          │    │        │             └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          │    │        └ <function Channel.send at 0x00000246A48539C0>
+          │    └ <playwright._impl._connection.Channel object at 0x00000246A6CF2350>
+          └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+                 │    │           └ <function Connection.wrap_api_call at 0x00000246A48C9940>
+                 │    └ <playwright._impl._connection.Connection object at 0x00000246A6A9BC90>
+                 └ <playwright._impl._connection.Channel object at 0x00000246A6CF2350>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 558, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+          └ <function rewrite_error at 0x00000246A47ED1C0>
+
+playwright._impl._errors.TimeoutError: Page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("img[title='Expand']")
+
+2025-10-27 15:21:42.675 | ERROR    | indusproject.status_scrapper:scrape_and_store_in_redis:113 - Error in scheduled Redis update: Page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("img[title='Expand']")
+
+Traceback (most recent call last):
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 995, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x000002D60D1A0400>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 29068)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1038, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x000002D60D1A00E0>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 29068)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(ThreadPoolExecutor-1_0, started daemon 29068)>
+    │    │        │    └ (<weakref at 0x000002D612B86070; to 'ThreadPoolExecutor' at 0x000002D61129C750>, <_queue.SimpleQueue object at 0x000002D61126...
+    │    │        └ <Thread(ThreadPoolExecutor-1_0, started daemon 29068)>
+    │    └ <function _worker at 0x000002D60EFC4E00>
+    └ <Thread(ThreadPoolExecutor-1_0, started daemon 29068)>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 83, in _worker
+    work_item.run()
+    │         └ <function _WorkItem.run at 0x000002D60EFC63E0>
+    └ <concurrent.futures.thread._WorkItem object at 0x000002D612BD8850>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │    │   │    │       │    └ {}
+             │    │   │    │       └ <concurrent.futures.thread._WorkItem object at 0x000002D612BD8850>
+             │    │   │    └ (<Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>, 'default', [datetime.datetime(2025, 10, 27, ...
+             │    │   └ <concurrent.futures.thread._WorkItem object at 0x000002D612BD8850>
+             │    └ <function run_job at 0x000002D61089BC40>
+             └ <concurrent.futures.thread._WorkItem object at 0x000002D612BD8850>
+  File "C:\Indus_project\env\Lib\site-packages\apscheduler\executors\base.py", line 131, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+             │   │     │   │       │   └ <member 'kwargs' of 'Job' objects>
+             │   │     │   │       └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+             │   │     │   └ <member 'args' of 'Job' objects>
+             │   │     └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+             │   └ <member 'func' of 'Job' objects>
+             └ <Job (id=scrape_and_store_in_redis name=Scrape Zepto PO data every 5 minutes)>
+
+> File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 106, in scrape_and_store_in_redis
+    result = asyncio.run(scraper.scrape_data())
+             │       │   │       └ <function POScraper.scrape_data at 0x000002D610EF6700>
+             │       │   └ <indusproject.status_scrapper.POScraper object at 0x000002D612BDA5D0>
+             │       └ <function run at 0x000002D60CB905E0>
+             └ <module 'asyncio' from 'C:\\Users\\Lenovo\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\asyncio\\__init__.py'>
+
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 190, in run
+    return runner.run(main)
+           │      │   └ <coroutine object POScraper.scrape_data at 0x000002D612587340>
+           │      └ <function Runner.run at 0x000002D60EF12DE0>
+           └ <asyncio.runners.Runner object at 0x000002D612BD9F90>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │                        └ <Task finished name='Task-1' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\status...
+           │    └ None
+           └ <asyncio.runners.Runner object at 0x000002D612BD9F90>
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 653, in run_until_complete
+    return future.result()
+           │      └ <method 'result' of '_asyncio.Task' objects>
+           └ <Task finished name='Task-1' coro=<POScraper.scrape_data() done, defined at C:\Indus_project\indusproject\indusproject\status...
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 75, in scrape_data
+    await self._navigate_to_orders(page)
+          │    │                   └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          │    └ <function POScraper._navigate_to_orders at 0x000002D610EF65C0>
+          └ <indusproject.status_scrapper.POScraper object at 0x000002D612BDA5D0>
+
+  File "C:\Indus_project\indusproject\indusproject\status_scrapper.py", line 46, in _navigate_to_orders
+    await page.click("img[title='Expand']")
+          │    └ <function Page.click at 0x000002D610E89F80>
+          └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+
+  File "C:\Indus_project\env\Lib\site-packages\playwright\async_api\_generated.py", line 9861, in click
+    await self._impl_obj.click(
+          │    │         └ <function Page.click at 0x000002D610B19DA0>
+          │    └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_page.py", line 859, in click
+    return await self._main_frame.click(**locals_to_params(locals()))
+                 │    │           │       └ <function locals_to_params at 0x000002D6109E2E80>
+                 │    │           └ <function Frame.click at 0x000002D610B04040>
+                 │    └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+                 └ <Page url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_frame.py", line 521, in click
+    await self._channel.send("click", self._timeout, locals_to_params(locals()))
+          │    │        │             │    │         └ <function locals_to_params at 0x000002D6109E2E80>
+          │    │        │             │    └ <function Frame._timeout at 0x000002D610AD2FC0>
+          │    │        │             └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+          │    │        └ <function Channel.send at 0x000002D6109E39C0>
+          │    └ <playwright._impl._connection.Channel object at 0x000002D612E61C50>
+          └ <Frame name= url='https://induserp.industowers.com/OA_HTML/AppsLocalLogin.jsp'>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+                 │    │           └ <function Connection.wrap_api_call at 0x000002D610A59940>
+                 │    └ <playwright._impl._connection.Connection object at 0x000002D6108318D0>
+                 └ <playwright._impl._connection.Channel object at 0x000002D612E61C50>
+  File "C:\Indus_project\env\Lib\site-packages\playwright\_impl\_connection.py", line 558, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+          └ <function rewrite_error at 0x000002D61097D1C0>
+
+playwright._impl._errors.TimeoutError: Page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("img[title='Expand']")
+
+2025-10-28 11:37:19.018 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 1...
+2025-10-28 11:37:19.829 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 1, total records: 25
+2025-10-28 11:37:19.857 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 2
+2025-10-28 11:37:24.923 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 2...
+2025-10-28 11:37:26.443 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 2, total records: 50
+2025-10-28 11:37:26.470 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 3
+2025-10-28 11:37:31.521 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 3...
+2025-10-28 11:37:32.537 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 3, total records: 75
+2025-10-28 11:37:32.543 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 4
+2025-10-28 11:37:37.589 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 4...
+2025-10-28 11:37:38.224 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 4, total records: 100
+2025-10-28 11:37:38.233 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 5
+2025-10-28 11:37:43.270 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 5...
+2025-10-28 11:37:43.930 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 5, total records: 125
+2025-10-28 11:37:43.948 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 6
+2025-10-28 11:37:48.993 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 6...
+2025-10-28 11:37:49.667 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 6, total records: 150
+2025-10-28 11:37:49.674 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 7
+2025-10-28 11:37:54.685 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 7...
+2025-10-28 11:37:55.334 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 7, total records: 175
+2025-10-28 11:37:55.343 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 8
+2025-10-28 11:38:00.379 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 8...
+2025-10-28 11:38:01.033 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 8, total records: 200
+2025-10-28 11:38:01.043 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 9
+2025-10-28 11:38:06.063 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 9...
+2025-10-28 11:38:06.755 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 9, total records: 225
+2025-10-28 11:38:06.773 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 10
+2025-10-28 11:38:11.800 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 10...
+2025-10-28 11:38:12.403 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 10, total records: 250
+2025-10-28 11:38:12.413 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 11
+2025-10-28 11:38:17.458 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 11...
+2025-10-28 11:38:18.144 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 11, total records: 275
+2025-10-28 11:38:18.153 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 12
+2025-10-28 11:38:23.173 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 12...
+2025-10-28 11:38:23.874 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 12, total records: 300
+2025-10-28 11:38:23.889 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 13
+2025-10-28 11:38:28.905 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 13...
+2025-10-28 11:38:29.580 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 13, total records: 325
+2025-10-28 11:38:29.593 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 14
+2025-10-28 11:38:34.655 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 14...
+2025-10-28 11:38:35.270 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 14, total records: 350
+2025-10-28 11:38:35.273 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 15
+2025-10-28 11:38:40.315 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 15...
+2025-10-28 11:38:41.035 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 15, total records: 375
+2025-10-28 11:38:41.043 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 16
+2025-10-28 11:38:46.089 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 16...
+2025-10-28 11:38:46.811 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 16, total records: 400
+2025-10-28 11:38:46.823 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 17
+2025-10-28 11:38:51.867 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 17...
+2025-10-28 11:38:52.516 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 17, total records: 425
+2025-10-28 11:38:52.523 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 18
+2025-10-28 11:38:57.578 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 18...
+2025-10-28 11:38:58.213 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 18, total records: 450
+2025-10-28 11:38:58.226 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 19
+2025-10-28 11:39:03.277 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 19...
+2025-10-28 11:39:03.925 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 19, total records: 475
+2025-10-28 11:39:03.933 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 20
+2025-10-28 11:39:08.963 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 20...
+2025-10-28 11:39:09.595 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 20, total records: 500
+2025-10-28 11:39:09.603 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 21
+2025-10-28 11:39:14.635 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 21...
+2025-10-28 11:39:15.243 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 21, total records: 525
+2025-10-28 11:39:15.253 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 22
+2025-10-28 11:39:20.267 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 22...
+2025-10-28 11:39:20.983 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 22, total records: 550
+2025-10-28 11:39:20.993 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 23
+2025-10-28 11:39:25.999 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 23...
+2025-10-28 11:39:26.623 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 23, total records: 575
+2025-10-28 11:39:26.635 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 24
+2025-10-28 11:39:31.651 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 24...
+2025-10-28 11:39:32.293 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 24, total records: 600
+2025-10-28 11:39:32.308 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 25
+2025-10-28 11:39:37.339 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 25...
+2025-10-28 11:39:37.983 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 25, total records: 625
+2025-10-28 11:39:37.995 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 26
+2025-10-28 11:39:43.039 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 26...
+2025-10-28 11:39:43.693 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 26, total records: 650
+2025-10-28 11:39:43.713 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 27
+2025-10-28 11:39:48.747 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 27...
+2025-10-28 11:39:49.355 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 27, total records: 675
+2025-10-28 11:39:49.369 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 28
+2025-10-28 11:39:54.407 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 28...
+2025-10-28 11:39:55.076 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 28, total records: 700
+2025-10-28 11:39:55.083 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 29
+2025-10-28 11:40:00.125 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 29...
+2025-10-28 11:40:00.753 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 29, total records: 725
+2025-10-28 11:40:00.763 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 30
+2025-10-28 11:40:05.818 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 30...
+2025-10-28 11:40:06.753 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 30, total records: 750
+2025-10-28 11:40:06.766 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 31
+2025-10-28 11:40:11.805 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 31...
+2025-10-28 11:40:12.445 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 31, total records: 775
+2025-10-28 11:40:12.459 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 32
+2025-10-28 11:40:17.499 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 32...
+2025-10-28 11:40:18.163 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 32, total records: 800
+2025-10-28 11:40:18.173 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 33
+2025-10-28 11:40:23.208 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 33...
+2025-10-28 11:40:23.824 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 33, total records: 825
+2025-10-28 11:40:23.843 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 34
+2025-10-28 11:40:28.885 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 34...
+2025-10-28 11:40:29.513 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 34, total records: 850
+2025-10-28 11:40:29.523 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 35
+2025-10-28 11:40:34.581 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 35...
+2025-10-28 11:40:35.239 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 35, total records: 875
+2025-10-28 11:40:35.253 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 36
+2025-10-28 11:40:40.293 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 36...
+2025-10-28 11:40:40.993 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 36, total records: 900
+2025-10-28 11:40:41.013 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 37
+2025-10-28 11:40:46.056 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 37...
+2025-10-28 11:40:47.456 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 37, total records: 925
+2025-10-28 11:40:47.473 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 38
+2025-10-28 11:40:52.540 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 38...
+2025-10-28 11:40:53.654 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 38, total records: 950
+2025-10-28 11:40:53.681 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 39
+2025-10-28 11:40:58.715 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 39...
+2025-10-28 11:40:59.879 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 39, total records: 975
+2025-10-28 11:40:59.897 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 40
+2025-10-28 11:41:04.951 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 40...
+2025-10-28 11:41:06.313 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 40, total records: 1000
+2025-10-28 11:41:06.323 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 41
+2025-10-28 11:41:11.365 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 41...
+2025-10-28 11:41:12.853 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 41, total records: 1025
+2025-10-28 11:41:12.879 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 42
+2025-10-28 11:41:17.916 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 42...
+2025-10-28 11:41:19.141 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 42, total records: 1050
+2025-10-28 11:41:19.153 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 43
+2025-10-28 11:41:24.215 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 43...
+2025-10-28 11:41:25.643 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 43, total records: 1075
+2025-10-28 11:41:25.666 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 44
+2025-10-28 11:41:30.730 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 44...
+2025-10-28 11:41:32.023 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 44, total records: 1100
+2025-10-28 11:41:32.053 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 45
+2025-10-28 11:41:37.099 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 45...
+2025-10-28 11:41:38.306 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 45, total records: 1125
+2025-10-28 11:41:38.330 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 46
+2025-10-28 11:41:43.359 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 46...
+2025-10-28 11:41:44.158 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 46, total records: 1150
+2025-10-28 11:41:44.170 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 47
+2025-10-28 11:41:49.203 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 47...
+2025-10-28 11:41:49.906 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 47, total records: 1175
+2025-10-28 11:41:49.917 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 48
+2025-10-28 11:41:54.934 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 48...
+2025-10-28 11:41:55.607 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 48, total records: 1200
+2025-10-28 11:41:55.616 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 49
+2025-10-28 11:42:00.656 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 49...
+2025-10-28 11:42:01.283 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 49, total records: 1225
+2025-10-28 11:42:01.293 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 50
+2025-10-28 11:42:06.330 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 50...
+2025-10-28 11:42:07.122 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 50, total records: 1250
+2025-10-28 11:42:07.138 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 51
+2025-10-28 11:42:12.183 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 51...
+2025-10-28 11:42:13.009 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 51, total records: 1275
+2025-10-28 11:42:13.024 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 52
+2025-10-28 11:42:18.053 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 52...
+2025-10-28 11:42:18.765 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 52, total records: 1300
+2025-10-28 11:42:18.775 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 53
+2025-10-28 11:42:23.798 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 53...
+2025-10-28 11:42:24.426 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 53, total records: 1325
+2025-10-28 11:42:24.437 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 54
+2025-10-28 11:42:29.477 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 54...
+2025-10-28 11:42:30.266 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 54, total records: 1350
+2025-10-28 11:42:30.275 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 55
+2025-10-28 11:42:35.298 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 55...
+2025-10-28 11:42:35.946 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 55, total records: 1375
+2025-10-28 11:42:35.956 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 56
+2025-10-28 11:42:40.991 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 56...
+2025-10-28 11:42:41.651 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 56, total records: 1400
+2025-10-28 11:42:41.662 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 57
+2025-10-28 11:42:46.697 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 57...
+2025-10-28 11:42:47.392 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 57, total records: 1425
+2025-10-28 11:42:47.403 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 58
+2025-10-28 11:42:52.438 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 58...
+2025-10-28 11:42:53.098 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 58, total records: 1450
+2025-10-28 11:42:53.109 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 59
+2025-10-28 11:42:58.138 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 59...
+2025-10-28 11:42:58.800 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 59, total records: 1475
+2025-10-28 11:42:58.808 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 60
+2025-10-28 11:43:03.835 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 60...
+2025-10-28 11:43:04.560 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 60, total records: 1500
+2025-10-28 11:43:04.572 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 61
+2025-10-28 11:43:09.601 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 61...
+2025-10-28 11:43:10.296 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 61, total records: 1525
+2025-10-28 11:43:10.306 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 62
+2025-10-28 11:43:15.344 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 62...
+2025-10-28 11:43:15.956 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 62, total records: 1550
+2025-10-28 11:43:15.966 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 63
+2025-10-28 11:43:21.002 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 63...
+2025-10-28 11:43:21.655 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 63, total records: 1575
+2025-10-28 11:43:21.665 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 64
+2025-10-28 11:43:26.714 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 64...
+2025-10-28 11:43:27.408 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 64, total records: 1600
+2025-10-28 11:43:27.421 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 65
+2025-10-28 11:43:32.462 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 65...
+2025-10-28 11:43:33.146 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 65, total records: 1625
+2025-10-28 11:43:33.160 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 66
+2025-10-28 11:43:38.202 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 66...
+2025-10-28 11:43:38.854 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 66, total records: 1650
+2025-10-28 11:43:38.865 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 67
+2025-10-28 11:43:43.924 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 67...
+2025-10-28 11:43:44.723 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 67, total records: 1675
+2025-10-28 11:43:44.734 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 68
+2025-10-28 11:43:49.771 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 68...
+2025-10-28 11:43:50.523 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 68, total records: 1700
+2025-10-28 11:43:50.534 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 69
+2025-10-28 11:43:55.574 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 69...
+2025-10-28 11:43:56.349 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 69, total records: 1725
+2025-10-28 11:43:56.360 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 70
+2025-10-28 11:44:01.374 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 70...
+2025-10-28 11:44:02.221 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 70, total records: 1750
+2025-10-28 11:44:02.234 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 71
+2025-10-28 11:44:07.264 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 71...
+2025-10-28 11:44:08.382 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 71, total records: 1775
+2025-10-28 11:44:08.395 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 72
+2025-10-28 11:44:13.416 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 72...
+2025-10-28 11:44:14.163 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 72, total records: 1800
+2025-10-28 11:44:14.173 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 73
+2025-10-28 11:44:19.207 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 73...
+2025-10-28 11:44:19.978 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 73, total records: 1825
+2025-10-28 11:44:19.991 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 74
+2025-10-28 11:44:25.033 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 74...
+2025-10-28 11:44:25.753 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 74, total records: 1850
+2025-10-28 11:44:25.765 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 75
+2025-10-28 11:44:30.806 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 75...
+2025-10-28 11:44:31.584 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 75, total records: 1875
+2025-10-28 11:44:31.596 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 76
+2025-10-28 11:44:36.622 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 76...
+2025-10-28 11:44:37.389 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 76, total records: 1900
+2025-10-28 11:44:37.401 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 77
+2025-10-28 11:44:42.444 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 77...
+2025-10-28 11:44:43.138 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 77, total records: 1925
+2025-10-28 11:44:43.154 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 78
+2025-10-28 11:44:48.176 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 78...
+2025-10-28 11:44:48.922 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 78, total records: 1950
+2025-10-28 11:44:48.936 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 79
+2025-10-28 11:44:53.971 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 79...
+2025-10-28 11:44:54.688 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 79, total records: 1975
+2025-10-28 11:44:54.700 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 80
+2025-10-28 11:44:59.743 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 80...
+2025-10-28 11:45:00.460 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 80, total records: 2000
+2025-10-28 11:45:00.470 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 81
+2025-10-28 11:45:05.501 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 81...
+2025-10-28 11:45:06.223 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 81, total records: 2025
+2025-10-28 11:45:06.235 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 82
+2025-10-28 11:45:11.271 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 82...
+2025-10-28 11:45:11.954 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 82, total records: 2050
+2025-10-28 11:45:11.965 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 83
+2025-10-28 11:45:16.999 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 83...
+2025-10-28 11:45:17.691 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 83, total records: 2075
+2025-10-28 11:45:17.701 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 84
+2025-10-28 11:45:22.720 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 84...
+2025-10-28 11:45:23.384 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 84, total records: 2100
+2025-10-28 11:45:23.393 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 85
+2025-10-28 11:45:28.409 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 85...
+2025-10-28 11:45:29.545 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 85, total records: 2125
+2025-10-28 11:45:29.556 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 86
+2025-10-28 11:45:34.584 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 86...
+2025-10-28 11:45:35.407 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 86, total records: 2150
+2025-10-28 11:45:35.424 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 87
+2025-10-28 11:45:40.436 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 87...
+2025-10-28 11:45:41.174 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 87, total records: 2175
+2025-10-28 11:45:41.185 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 88
+2025-10-28 11:45:46.220 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 88...
+2025-10-28 11:45:46.934 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 88, total records: 2200
+2025-10-28 11:45:46.944 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 89
+2025-10-28 11:45:51.979 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 89...
+2025-10-28 11:45:52.820 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 89, total records: 2225
+2025-10-28 11:45:52.832 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 90
+2025-10-28 11:45:57.862 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 90...
+2025-10-28 11:45:58.653 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 90, total records: 2250
+2025-10-28 11:45:58.664 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 91
+2025-10-28 11:46:03.697 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 91...
+2025-10-28 11:46:04.610 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 91, total records: 2275
+2025-10-28 11:46:04.623 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 92
+2025-10-28 11:46:09.658 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 92...
+2025-10-28 11:46:10.413 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 92, total records: 2300
+2025-10-28 11:46:10.425 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 93
+2025-10-28 11:46:15.458 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 93...
+2025-10-28 11:46:16.290 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 93, total records: 2325
+2025-10-28 11:46:16.299 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 94
+2025-10-28 11:46:21.334 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 94...
+2025-10-28 11:46:22.166 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 94, total records: 2350
+2025-10-28 11:46:22.181 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 95
+2025-10-28 11:46:27.212 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 95...
+2025-10-28 11:46:27.977 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 95, total records: 2375
+2025-10-28 11:46:27.986 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 96
+2025-10-28 11:46:33.007 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 96...
+2025-10-28 11:46:33.900 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 96, total records: 2400
+2025-10-28 11:46:33.918 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 97
+2025-10-28 11:46:38.963 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 97...
+2025-10-28 11:46:39.783 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 97, total records: 2425
+2025-10-28 11:46:39.798 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 98
+2025-10-28 11:46:44.835 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 98...
+2025-10-28 11:46:45.632 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 98, total records: 2450
+2025-10-28 11:46:45.646 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 99
+2025-10-28 11:46:50.673 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 99...
+2025-10-28 11:46:51.602 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 99, total records: 2475
+2025-10-28 11:46:51.615 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 100
+2025-10-28 11:46:56.648 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 100...
+2025-10-28 11:46:57.335 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 100, total records: 2500
+2025-10-28 11:46:57.345 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 101
+2025-10-28 11:47:02.388 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 101...
+2025-10-28 11:47:03.214 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 101, total records: 2525
+2025-10-28 11:47:03.228 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 102
+2025-10-28 11:47:08.269 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 102...
+2025-10-28 11:47:09.095 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 102, total records: 2550
+2025-10-28 11:47:09.111 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 103
+2025-10-28 11:47:14.146 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 103...
+2025-10-28 11:47:14.794 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 103, total records: 2575
+2025-10-28 11:47:14.805 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 104
+2025-10-28 11:47:19.836 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 104...
+2025-10-28 11:47:20.570 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 104, total records: 2600
+2025-10-28 11:47:20.582 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 105
+2025-10-28 11:47:25.604 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 105...
+2025-10-28 11:47:26.187 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 105, total records: 2625
+2025-10-28 11:47:26.198 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 106
+2025-10-28 11:47:31.235 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 106...
+2025-10-28 11:47:31.884 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 106, total records: 2650
+2025-10-28 11:47:31.894 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 107
+2025-10-28 11:47:36.927 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 107...
+2025-10-28 11:47:37.592 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 107, total records: 2675
+2025-10-28 11:47:37.602 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 108
+2025-10-28 11:47:42.644 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 108...
+2025-10-28 11:47:43.460 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 108, total records: 2700
+2025-10-28 11:47:43.468 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 109
+2025-10-28 11:47:48.498 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 109...
+2025-10-28 11:47:49.257 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 109, total records: 2725
+2025-10-28 11:47:49.268 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 110
+2025-10-28 11:47:54.280 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 110...
+2025-10-28 11:47:54.932 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 110, total records: 2750
+2025-10-28 11:47:54.946 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 111
+2025-10-28 11:47:59.976 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 111...
+2025-10-28 11:48:00.672 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 111, total records: 2775
+2025-10-28 11:48:00.692 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 112
+2025-10-28 11:48:05.741 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 112...
+2025-10-28 11:48:06.382 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 112, total records: 2800
+2025-10-28 11:48:06.458 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 113
+2025-10-28 11:48:11.502 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 113...
+2025-10-28 11:48:12.152 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 113, total records: 2825
+2025-10-28 11:48:12.162 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 114
+2025-10-28 11:48:17.206 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 114...
+2025-10-28 11:48:17.932 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 114, total records: 2850
+2025-10-28 11:48:17.947 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 115
+2025-10-28 11:48:22.974 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 115...
+2025-10-28 11:48:23.622 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 115, total records: 2875
+2025-10-28 11:48:23.632 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 116
+2025-10-28 11:48:28.670 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 116...
+2025-10-28 11:48:29.272 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 116, total records: 2900
+2025-10-28 11:48:29.282 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 117
+2025-10-28 11:48:34.311 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 117...
+2025-10-28 11:48:34.972 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 117, total records: 2925
+2025-10-28 11:48:34.982 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 118
+2025-10-28 11:48:40.008 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 118...
+2025-10-28 11:48:40.642 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 118, total records: 2950
+2025-10-28 11:48:40.660 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 119
+2025-10-28 11:48:45.692 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 119...
+2025-10-28 11:48:46.382 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 119, total records: 2975
+2025-10-28 11:48:46.392 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 120
+2025-10-28 11:48:51.433 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 120...
+2025-10-28 11:48:52.112 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 120, total records: 3000
+2025-10-28 11:48:52.122 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 121
+2025-10-28 11:48:57.162 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 121...
+2025-10-28 11:48:57.905 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 121, total records: 3025
+2025-10-28 11:48:57.922 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 122
+2025-10-28 11:49:02.960 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 122...
+2025-10-28 11:49:03.752 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 122, total records: 3050
+2025-10-28 11:49:03.768 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 123
+2025-10-28 11:49:08.777 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 123...
+2025-10-28 11:49:09.380 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 123, total records: 3075
+2025-10-28 11:49:09.382 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 124
+2025-10-28 11:49:14.434 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 124...
+2025-10-28 11:49:15.117 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 124, total records: 3100
+2025-10-28 11:49:15.130 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 125
+2025-10-28 11:49:20.164 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 125...
+2025-10-28 11:49:20.862 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 125, total records: 3125
+2025-10-28 11:49:20.878 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 126
+2025-10-28 11:49:25.904 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 126...
+2025-10-28 11:49:26.642 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 126, total records: 3150
+2025-10-28 11:49:26.652 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 127
+2025-10-28 11:49:31.712 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 127...
+2025-10-28 11:49:32.302 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 127, total records: 3175
+2025-10-28 11:49:32.314 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 128
+2025-10-28 11:49:37.366 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 128...
+2025-10-28 11:49:38.042 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 128, total records: 3200
+2025-10-28 11:49:38.052 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 129
+2025-10-28 11:49:43.105 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 129...
+2025-10-28 11:49:43.742 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 129, total records: 3225
+2025-10-28 11:49:43.752 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 130
+2025-10-28 11:49:48.804 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 130...
+2025-10-28 11:49:49.492 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 130, total records: 3250
+2025-10-28 11:49:49.502 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 131
+2025-10-28 11:49:54.538 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 131...
+2025-10-28 11:49:55.252 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 131, total records: 3275
+2025-10-28 11:49:55.262 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 132
+2025-10-28 11:50:00.288 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 132...
+2025-10-28 11:50:00.888 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 132, total records: 3300
+2025-10-28 11:50:00.892 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 133
+2025-10-28 11:50:05.937 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 133...
+2025-10-28 11:50:06.583 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 133, total records: 3325
+2025-10-28 11:50:06.599 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 134
+2025-10-28 11:50:11.641 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 134...
+2025-10-28 11:50:12.459 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 134, total records: 3350
+2025-10-28 11:50:12.472 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 135
+2025-10-28 11:50:17.520 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 135...
+2025-10-28 11:50:18.312 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 135, total records: 3375
+2025-10-28 11:50:18.323 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 136
+2025-10-28 11:50:23.367 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 136...
+2025-10-28 11:50:24.439 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 136, total records: 3400
+2025-10-28 11:50:24.450 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 137
+2025-10-28 11:50:29.495 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 137...
+2025-10-28 11:50:30.559 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 137, total records: 3425
+2025-10-28 11:50:30.569 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 138
+2025-10-28 11:50:35.621 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 138...
+2025-10-28 11:50:36.381 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 138, total records: 3450
+2025-10-28 11:50:36.389 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 139
+2025-10-28 11:50:41.432 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 139...
+2025-10-28 11:50:42.403 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 139, total records: 3475
+2025-10-28 11:50:42.422 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 140
+2025-10-28 11:50:47.463 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 140...
+2025-10-28 11:50:48.349 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 140, total records: 3500
+2025-10-28 11:50:48.364 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 141
+2025-10-28 11:50:53.411 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 141...
+2025-10-28 11:50:54.223 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 141, total records: 3525
+2025-10-28 11:50:54.239 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 142
+2025-10-28 11:50:59.268 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 142...
+2025-10-28 11:51:00.189 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 142, total records: 3550
+2025-10-28 11:51:00.210 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 143
+2025-10-28 11:51:05.259 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 143...
+2025-10-28 11:51:06.079 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 143, total records: 3575
+2025-10-28 11:51:06.094 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 144
+2025-10-28 11:51:11.149 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 144...
+2025-10-28 11:51:12.160 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 144, total records: 3600
+2025-10-28 11:51:12.171 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 145
+2025-10-28 11:51:17.236 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 145...
+2025-10-28 11:51:18.141 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 145, total records: 3625
+2025-10-28 11:51:18.159 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 146
+2025-10-28 11:51:23.206 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 146...
+2025-10-28 11:51:23.985 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 146, total records: 3650
+2025-10-28 11:51:23.989 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 147
+2025-10-28 11:51:29.033 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 147...
+2025-10-28 11:51:29.879 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 147, total records: 3675
+2025-10-28 11:51:29.893 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 148
+2025-10-28 11:51:34.933 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 148...
+2025-10-28 11:51:35.859 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 148, total records: 3700
+2025-10-28 11:51:35.869 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 149
+2025-10-28 11:51:40.900 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 149...
+2025-10-28 11:51:41.710 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 149, total records: 3725
+2025-10-28 11:51:41.724 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 150
+2025-10-28 11:51:46.758 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 150...
+2025-10-28 11:51:47.547 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 150, total records: 3750
+2025-10-28 11:51:47.559 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 151
+2025-10-28 11:51:52.586 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 151...
+2025-10-28 11:51:53.449 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 151, total records: 3775
+2025-10-28 11:51:53.469 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 152
+2025-10-28 11:51:58.515 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 152...
+2025-10-28 11:51:59.327 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 152, total records: 3800
+2025-10-28 11:51:59.339 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 153
+2025-10-28 11:52:04.370 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 153...
+2025-10-28 11:52:05.199 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 153, total records: 3825
+2025-10-28 11:52:05.226 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 154
+2025-10-28 11:52:10.279 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 154...
+2025-10-28 11:52:11.109 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 154, total records: 3850
+2025-10-28 11:52:11.129 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 155
+2025-10-28 11:52:16.178 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 155...
+2025-10-28 11:52:16.971 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 155, total records: 3875
+2025-10-28 11:52:16.989 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 156
+2025-10-28 11:52:22.031 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 156...
+2025-10-28 11:52:22.836 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 156, total records: 3900
+2025-10-28 11:52:22.851 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 157
+2025-10-28 11:52:27.895 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 157...
+2025-10-28 11:52:28.722 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 157, total records: 3925
+2025-10-28 11:52:28.739 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 158
+2025-10-28 11:52:33.784 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 158...
+2025-10-28 11:52:34.569 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 158, total records: 3950
+2025-10-28 11:52:34.589 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 159
+2025-10-28 11:52:39.637 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 159...
+2025-10-28 11:52:40.489 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 159, total records: 3975
+2025-10-28 11:52:40.505 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 160
+2025-10-28 11:52:45.539 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 160...
+2025-10-28 11:52:46.449 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 160, total records: 4000
+2025-10-28 11:52:46.474 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 161
+2025-10-28 11:52:51.527 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 161...
+2025-10-28 11:52:52.323 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 161, total records: 4025
+2025-10-28 11:52:52.337 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 162
+2025-10-28 11:52:57.367 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 162...
+2025-10-28 11:52:58.169 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 162, total records: 4050
+2025-10-28 11:52:58.182 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 163
+2025-10-28 11:53:03.227 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 163...
+2025-10-28 11:53:04.114 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 163, total records: 4075
+2025-10-28 11:53:04.122 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 164
+2025-10-28 11:53:09.160 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 164...
+2025-10-28 11:53:09.981 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 164, total records: 4100
+2025-10-28 11:53:09.991 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 165
+2025-10-28 11:53:15.028 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 165...
+2025-10-28 11:53:15.615 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 165, total records: 4125
+2025-10-28 11:53:15.626 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 166
+2025-10-28 11:53:20.650 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 166...
+2025-10-28 11:53:21.393 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 166, total records: 4150
+2025-10-28 11:53:21.402 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 167
+2025-10-28 11:53:26.425 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 167...
+2025-10-28 11:53:27.127 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 167, total records: 4175
+2025-10-28 11:53:27.139 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 168
+2025-10-28 11:53:32.159 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 168...
+2025-10-28 11:53:32.767 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 168, total records: 4200
+2025-10-28 11:53:32.776 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 169
+2025-10-28 11:53:37.827 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 169...
+2025-10-28 11:53:38.448 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 169, total records: 4225
+2025-10-28 11:53:38.464 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 170
+2025-10-28 11:53:43.487 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 170...
+2025-10-28 11:53:44.147 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 170, total records: 4250
+2025-10-28 11:53:44.166 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 171
+2025-10-28 11:53:49.206 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 171...
+2025-10-28 11:53:50.087 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 171, total records: 4275
+2025-10-28 11:53:50.099 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 172
+2025-10-28 11:53:55.144 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 172...
+2025-10-28 11:53:56.465 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 172, total records: 4300
+2025-10-28 11:53:56.479 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 173
+2025-10-28 11:54:01.543 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 173...
+2025-10-28 11:54:02.353 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 173, total records: 4325
+2025-10-28 11:54:02.366 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 174
+2025-10-28 11:54:07.387 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 174...
+2025-10-28 11:54:08.219 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 174, total records: 4350
+2025-10-28 11:54:08.231 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 175
+2025-10-28 11:54:13.254 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 175...
+2025-10-28 11:54:13.879 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 175, total records: 4375
+2025-10-28 11:54:13.891 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 176
+2025-10-28 11:54:18.919 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 176...
+2025-10-28 11:54:19.725 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 176, total records: 4400
+2025-10-28 11:54:19.736 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 177
+2025-10-28 11:54:24.745 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 177...
+2025-10-28 11:54:25.405 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 177, total records: 4425
+2025-10-28 11:54:25.415 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 178
+2025-10-28 11:54:30.445 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 178...
+2025-10-28 11:54:31.057 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 178, total records: 4450
+2025-10-28 11:54:31.072 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 179
+2025-10-28 11:54:36.122 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 179...
+2025-10-28 11:54:36.728 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 179, total records: 4475
+2025-10-28 11:54:36.740 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 180
+2025-10-28 11:54:41.771 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 180...
+2025-10-28 11:54:42.382 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 180, total records: 4500
+2025-10-28 11:54:42.391 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 181
+2025-10-28 11:54:47.419 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 181...
+2025-10-28 11:54:48.061 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 181, total records: 4525
+2025-10-28 11:54:48.071 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 182
+2025-10-28 11:54:53.104 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 182...
+2025-10-28 11:54:53.685 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 182, total records: 4550
+2025-10-28 11:54:53.694 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 183
+2025-10-28 11:54:58.729 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 183...
+2025-10-28 11:54:59.340 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 183, total records: 4575
+2025-10-28 11:54:59.350 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 184
+2025-10-28 11:55:04.383 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 184...
+2025-10-28 11:55:04.998 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 184, total records: 4600
+2025-10-28 11:55:05.009 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 185
+2025-10-28 11:55:10.038 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 185...
+2025-10-28 11:55:10.616 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 185, total records: 4625
+2025-10-28 11:55:10.626 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 186
+2025-10-28 11:55:15.665 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 186...
+2025-10-28 11:55:16.267 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 186, total records: 4650
+2025-10-28 11:55:16.276 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 187
+2025-10-28 11:55:21.306 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 187...
+2025-10-28 11:55:21.920 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 187, total records: 4675
+2025-10-28 11:55:21.929 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 188
+2025-10-28 11:55:26.962 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 188...
+2025-10-28 11:55:27.934 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 188, total records: 4700
+2025-10-28 11:55:27.941 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 189
+2025-10-28 11:55:32.978 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 189...
+2025-10-28 11:55:33.569 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 189, total records: 4725
+2025-10-28 11:55:33.569 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 190
+2025-10-28 11:55:38.599 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 190...
+2025-10-28 11:55:39.297 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 190, total records: 4750
+2025-10-28 11:55:39.300 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 191
+2025-10-28 11:55:44.343 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 191...
+2025-10-28 11:55:44.969 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 191, total records: 4775
+2025-10-28 11:55:44.979 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 192
+2025-10-28 11:55:50.009 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 192...
+2025-10-28 11:55:50.629 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 192, total records: 4800
+2025-10-28 11:55:50.642 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 193
+2025-10-28 11:55:55.679 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 193...
+2025-10-28 11:55:56.289 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 193, total records: 4825
+2025-10-28 11:55:56.301 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 194
+2025-10-28 11:56:01.327 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 194...
+2025-10-28 11:56:01.963 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 194, total records: 4850
+2025-10-28 11:56:01.975 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 195
+2025-10-28 11:56:06.999 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 195...
+2025-10-28 11:56:07.569 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 195, total records: 4875
+2025-10-28 11:56:07.582 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 196
+2025-10-28 11:56:12.595 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 196...
+2025-10-28 11:56:13.209 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 196, total records: 4900
+2025-10-28 11:56:13.221 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 197
+2025-10-28 11:56:18.266 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 197...
+2025-10-28 11:56:18.870 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 197, total records: 4925
+2025-10-28 11:56:18.889 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 198
+2025-10-28 11:56:23.933 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 198...
+2025-10-28 11:56:24.540 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 198, total records: 4950
+2025-10-28 11:56:24.550 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 199
+2025-10-28 11:56:29.578 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 199...
+2025-10-28 11:56:30.169 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 199, total records: 4975
+2025-10-28 11:56:30.180 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 200
+2025-10-28 11:56:35.215 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 200...
+2025-10-28 11:56:35.851 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 200, total records: 5000
+2025-10-28 11:56:35.859 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 201
+2025-10-28 11:56:40.882 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 201...
+2025-10-28 11:56:41.449 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 201, total records: 5025
+2025-10-28 11:56:41.469 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 202
+2025-10-28 11:56:46.498 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 202...
+2025-10-28 11:56:47.099 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 202, total records: 5050
+2025-10-28 11:56:47.109 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 203
+2025-10-28 11:56:52.131 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 203...
+2025-10-28 11:56:52.739 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 203, total records: 5075
+2025-10-28 11:56:52.749 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 204
+2025-10-28 11:56:57.797 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 204...
+2025-10-28 11:56:58.379 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 204, total records: 5100
+2025-10-28 11:56:58.389 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 205
+2025-10-28 11:57:03.423 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 205...
+2025-10-28 11:57:03.994 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 205, total records: 5125
+2025-10-28 11:57:03.999 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 206
+2025-10-28 11:57:09.050 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 206...
+2025-10-28 11:57:09.977 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 206, total records: 5150
+2025-10-28 11:57:09.989 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 207
+2025-10-28 11:57:15.008 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 207...
+2025-10-28 11:57:15.705 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 207, total records: 5175
+2025-10-28 11:57:15.719 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 208
+2025-10-28 11:57:20.757 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 208...
+2025-10-28 11:57:21.339 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 208, total records: 5200
+2025-10-28 11:57:21.349 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 209
+2025-10-28 11:57:26.378 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 209...
+2025-10-28 11:57:27.310 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 209, total records: 5225
+2025-10-28 11:57:27.319 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 210
+2025-10-28 11:57:32.343 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 210...
+2025-10-28 11:57:32.949 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 210, total records: 5250
+2025-10-28 11:57:32.962 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 211
+2025-10-28 11:57:38.012 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 211...
+2025-10-28 11:57:38.629 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 211, total records: 5275
+2025-10-28 11:57:38.629 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 212
+2025-10-28 11:57:43.687 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 212...
+2025-10-28 11:57:44.269 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 212, total records: 5300
+2025-10-28 11:57:44.279 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 213
+2025-10-28 11:57:49.299 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 213...
+2025-10-28 11:57:50.011 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 213, total records: 5325
+2025-10-28 11:57:50.019 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 214
+2025-10-28 11:57:55.056 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 214...
+2025-10-28 11:57:55.658 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 214, total records: 5350
+2025-10-28 11:57:55.680 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 215
+2025-10-28 11:58:00.724 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 215...
+2025-10-28 11:58:01.313 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 215, total records: 5375
+2025-10-28 11:58:01.326 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 216
+2025-10-28 11:58:06.350 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 216...
+2025-10-28 11:58:07.390 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 216, total records: 5400
+2025-10-28 11:58:07.399 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 217
+2025-10-28 11:58:12.439 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 217...
+2025-10-28 11:58:13.020 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 217, total records: 5425
+2025-10-28 11:58:13.029 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 218
+2025-10-28 11:58:18.060 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 218...
+2025-10-28 11:58:18.660 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 218, total records: 5450
+2025-10-28 11:58:18.676 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 219
+2025-10-28 11:58:23.709 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 219...
+2025-10-28 11:58:24.742 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 219, total records: 5475
+2025-10-28 11:58:24.765 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 220
+2025-10-28 11:58:29.830 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 220...
+2025-10-28 11:58:30.773 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 220, total records: 5500
+2025-10-28 11:58:30.780 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 221
+2025-10-28 11:58:35.817 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 221...
+2025-10-28 11:58:36.733 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 221, total records: 5525
+2025-10-28 11:58:36.760 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 222
+2025-10-28 11:58:41.793 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 222...
+2025-10-28 11:58:42.726 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 222, total records: 5550
+2025-10-28 11:58:42.742 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 223
+2025-10-28 11:58:47.798 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 223...
+2025-10-28 11:58:48.686 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 223, total records: 5575
+2025-10-28 11:58:48.700 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 224
+2025-10-28 11:58:53.747 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 224...
+2025-10-28 11:58:54.902 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 224, total records: 5600
+2025-10-28 11:58:54.925 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 225
+2025-10-28 11:58:59.981 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 225...
+2025-10-28 11:59:01.459 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 225, total records: 5625
+2025-10-28 11:59:01.476 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 226
+2025-10-28 11:59:06.525 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 226...
+2025-10-28 11:59:07.455 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 226, total records: 5650
+2025-10-28 11:59:07.469 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 227
+2025-10-28 11:59:12.515 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 227...
+2025-10-28 11:59:13.437 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 227, total records: 5675
+2025-10-28 11:59:13.449 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 228
+2025-10-28 11:59:18.501 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 228...
+2025-10-28 11:59:19.489 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 228, total records: 5700
+2025-10-28 11:59:19.500 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 229
+2025-10-28 11:59:24.548 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 229...
+2025-10-28 11:59:25.479 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 229, total records: 5725
+2025-10-28 11:59:25.499 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 230
+2025-10-28 11:59:30.535 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 230...
+2025-10-28 11:59:31.459 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 230, total records: 5750
+2025-10-28 11:59:31.469 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 231
+2025-10-28 11:59:36.510 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 231...
+2025-10-28 11:59:37.447 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 231, total records: 5775
+2025-10-28 11:59:37.466 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 232
+2025-10-28 11:59:42.513 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 232...
+2025-10-28 11:59:43.475 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 232, total records: 5800
+2025-10-28 11:59:43.489 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 233
+2025-10-28 11:59:48.540 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 233...
+2025-10-28 11:59:49.526 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 233, total records: 5825
+2025-10-28 11:59:49.540 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 234
+2025-10-28 11:59:54.600 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 234...
+2025-10-28 11:59:55.581 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 234, total records: 5850
+2025-10-28 11:59:55.599 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 235
+2025-10-28 12:00:00.639 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 235...
+2025-10-28 12:00:01.611 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 235, total records: 5875
+2025-10-28 12:00:01.631 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 236
+2025-10-28 12:00:06.654 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 236...
+2025-10-28 12:00:07.543 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 236, total records: 5900
+2025-10-28 12:00:07.559 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 237
+2025-10-28 12:00:12.601 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 237...
+2025-10-28 12:00:13.792 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 237, total records: 5925
+2025-10-28 12:00:13.821 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 238
+2025-10-28 12:00:18.873 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 238...
+2025-10-28 12:00:19.914 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 238, total records: 5950
+2025-10-28 12:00:19.933 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 239
+2025-10-28 12:00:24.969 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 239...
+2025-10-28 12:00:25.944 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 239, total records: 5975
+2025-10-28 12:00:25.957 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 240
+2025-10-28 12:00:31.008 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 240...
+2025-10-28 12:00:31.990 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 240, total records: 6000
+2025-10-28 12:00:32.009 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 241
+2025-10-28 12:00:37.051 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 241...
+2025-10-28 12:00:38.045 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 241, total records: 6025
+2025-10-28 12:00:38.059 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 242
+2025-10-28 12:00:43.106 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 242...
+2025-10-28 12:00:44.079 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 242, total records: 6050
+2025-10-28 12:00:44.090 | INFO     | indusproject.status_scrapper:scrape_data:85 - ➡️ Moving to page 243
+2025-10-28 12:00:49.127 | INFO     | indusproject.status_scrapper:_scrape_page:54 - 📄 Scraping page 243...
+2025-10-28 12:00:49.283 | INFO     | indusproject.status_scrapper:_scrape_page:66 - ✅ Finished scraping page 243, total records: 6051
+2025-10-28 12:00:49.290 | INFO     | indusproject.status_scrapper:scrape_data:93 - ⏹ Next button not found, stopping scrape.
+2025-10-28 12:00:49.613 | INFO     | indusproject.status_scrapper:scrape_and_store_in_redis:109 - Scraped data stored in Redis under key 'Po_status'
