@@ -133,16 +133,19 @@ def update_erp_password(request):
         return Response({"error": str(e)}, status=500)
 
 
-@api_view(['POST'])
-@authentication_classes([])  # Disable default DRF auth for this endpoint
-@permission_classes([]) 
-@token_required
-def update_cron_time(request):
+# indusapi/views.py
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.response import Response
+from indusproject.scheduler import update_job_schedule
 
-    
+@api_view(['POST'])
+@authentication_classes([])  # remove if you use authentication
+@permission_classes([])      # remove if you use authentication
+def update_cron_time(request):
     """
-    Endpoint to update the cron time of a scheduled job.
-    Example POST body:
+    Update cron time for a scheduled job.
+
+    Example request JSON:
     {
         "job_id": "indus_po_scraper",
         "hour": 14,
@@ -157,11 +160,11 @@ def update_cron_time(request):
         if job_id not in ['indus_po_scraper', 'scrape_and_store_in_redis']:
             return Response({"error": "Invalid job_id"}, status=400)
 
-        result = update_job_schedule(job_id, hour, minute)
-        return Response({
-                "job_id": job_id,
-                "hour": hour,
-                "minute": minute
-                }, status=200)
+        success, message = update_job_schedule(job_id, hour, minute)
+        if success:
+            return Response({"status": "success", "message": message}, status=200)
+        else:
+            return Response({"status": "failed", "message": message}, status=400)
+
     except Exception as e:
         return Response({"error": str(e)}, status=500)
