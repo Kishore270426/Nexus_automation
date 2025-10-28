@@ -137,16 +137,16 @@ def update_erp_password(request):
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from indusproject.scheduler import update_job_schedule
+from .utils import token_required
 
 @api_view(['POST'])
-@authentication_classes([])  # remove if you use authentication
-@permission_classes([])      # remove if you use authentication
+@authentication_classes([])  # Keep empty because token_required handles auth
+@permission_classes([])
 @token_required
 def update_cron_time(request):
     """
-    Update cron time for a scheduled job.
-
-    Example request JSON:
+    Update job time in Redis + scheduler.
+    Example request:
     {
         "job_id": "indus_po_scraper",
         "hour": 14,
@@ -154,18 +154,16 @@ def update_cron_time(request):
     }
     """
     try:
-        job_id = request.data.get('job_id')
-        hour = int(request.data.get('hour'))
-        minute = int(request.data.get('minute'))
+        job_id = request.data.get("job_id")
+        hour = int(request.data.get("hour"))
+        minute = int(request.data.get("minute"))
 
-        if job_id not in ['indus_po_scraper', 'scrape_and_store_in_redis']:
+        if job_id not in ["indus_po_scraper", "scrape_and_store_in_redis"]:
             return Response({"error": "Invalid job_id"}, status=400)
 
         success, message = update_job_schedule(job_id, hour, minute)
-        if success:
-            return Response({"status": "success", "message": message}, status=200)
-        else:
-            return Response({"status": "failed", "message": message}, status=400)
+        status_code = 200 if success else 400
+        return Response({"status": "success" if success else "failed", "message": message}, status=status_code)
 
     except Exception as e:
-        return Response({"error": str(e)}, status=500)
+        return Response({"status": "failed", "message": str(e)}, status=500)
