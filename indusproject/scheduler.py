@@ -1,6 +1,6 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from .scrapper import scrape_indus_po_data
-from .status_scrapper import scrape_and_store_in_redis 
+from indusproject.scrapper import scrape_indus_po_data
+from indusproject.status_scrapper import scrape_and_store_in_redis 
 from apscheduler.triggers.interval import IntervalTrigger
 from apscheduler.triggers.cron import CronTrigger
 
