@@ -181,7 +181,7 @@ def collect_non_zero_po_numbers(page, max_pages=1):
                 po_number = cells[0].inner_text().strip()
                 rev = cells[1].inner_text().strip()
                 order_date = cells[5].inner_text().strip()
-                if po_number and rev and rev != "0":
+                if po_number and rev and rev == "0":
                     po_list.append({
                         "po_number": po_number,
                         "rev": rev,
@@ -200,9 +200,7 @@ def collect_non_zero_po_numbers(page, max_pages=1):
         break
     return po_list
 
-import datetime
-
-def collect_rev0_po_numbers(page):
+def collect_rev0_po_numbers(page, max_pages=1):
     po_list = []
 
     # Navigate to PO history and advanced search
@@ -211,26 +209,35 @@ def collect_rev0_po_numbers(page):
     safe_click(page, "button[title='Advanced Search']")
     print("[INFO] Opened Advanced Search")
     safe_click(page, "button#customizeSubmitButton")
-    print("[INFO] Submitted Advanced Search")
     page.wait_for_load_state('load')
     page.wait_for_timeout(5000)
 
-    # Scrape only the current page
-    #page.wait_for_selector("table#PosRevHistoryTable\\:Content tbody tr", timeout=30000)
-    rows = page.query_selector_all("table#PosRevHistoryTable\\:Content tbody tr")
-    for row in rows:
-        po_number_elem = row.query_selector("td a[id*='PosPoNumRelNum']")
-        po_number = po_number_elem.inner_text().strip() if po_number_elem else ""
-        creation_date_elem = row.query_selector("td span[id*='PosOrderDateTime']")
-        creation_date = creation_date_elem.inner_text().strip() if creation_date_elem else ""
-        if po_number:
-            po_list.append({
-                "po_number": po_number,
-                "rev": "0",
-                "creation_date": creation_date,
-                "scraped_at": datetime.datetime.now().isoformat(),
-                "items": []
-            })
+    current_page = 1
+    while current_page <= max_pages:
+        page.wait_for_selector("table#PosRevHistoryTable\\:Content tbody tr", timeout=30000)
+        rows = page.query_selector_all("table#PosRevHistoryTable\\:Content tbody tr")
+        for row in rows:
+            po_number_elem = row.query_selector("td a[id*='PosPoNumRelNum']")
+            po_number = po_number_elem.inner_text().strip() if po_number_elem else ""
+            creation_date_elem = row.query_selector("td span[id*='PosOrderDateTime']")
+            creation_date = creation_date_elem.inner_text().strip() if creation_date_elem else ""
+            if po_number:
+                po_list.append({
+                    "po_number": po_number,
+                    "rev": "0",
+                    "creation_date": creation_date,
+                    "scraped_at": datetime.datetime.now().isoformat(),
+                    "items": []
+                })
+
+        next_button = page.query_selector("a:has-text('Next')")
+        if next_button and "disabled" not in (next_button.get_attribute("class") or "").lower():
+            if not safe_click(page, "a:has-text('Next')", retries=3):
+                print("[WARNING] Could not click Next button. Stopping pagination.")
+                break
+            current_page += 1
+            continue
+        break
 
     return po_list
 
@@ -300,7 +307,7 @@ def scrape_indus_po_data():
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
+            browser = p.chromium.launch(headless=False)
             context = browser.new_context()
             page = context.new_page()
             page.goto(ERP_LOGIN_URL)
