@@ -205,8 +205,11 @@ def collect_rev0_po_numbers(page, max_pages=1):
 
     # Navigate to PO history and advanced search
     safe_click(page, "a#POS_PO_HISTORY")
+    print("[INFO] Navigated to PO History")
     safe_click(page, "button[title='Advanced Search']")
+    print("[INFO] Opened Advanced Search")
     safe_click(page, "button#customizeSubmitButton")
+    print("[INFO] Submitted Advanced Search")
     page.wait_for_load_state('load')
     page.wait_for_timeout(5000)
 
@@ -305,7 +308,7 @@ def scrape_indus_po_data():
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
+            browser = p.chromium.launch(headless=False)
             context = browser.new_context()
             page = context.new_page()
             page.goto(ERP_LOGIN_URL)
