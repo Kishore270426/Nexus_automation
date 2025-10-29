@@ -216,7 +216,7 @@ def collect_rev0_po_numbers(page):
     page.wait_for_timeout(5000)
 
     # Scrape only the current page
-    page.wait_for_selector("table#PosRevHistoryTable\\:Content tbody tr", timeout=30000)
+    #page.wait_for_selector("table#PosRevHistoryTable\\:Content tbody tr", timeout=30000)
     rows = page.query_selector_all("table#PosRevHistoryTable\\:Content tbody tr")
     for row in rows:
         po_number_elem = row.query_selector("td a[id*='PosPoNumRelNum']")
@@ -300,7 +300,7 @@ def scrape_indus_po_data():
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
+            browser = p.chromium.launch(headless=False)
             context = browser.new_context()
             page = context.new_page()
             page.goto(ERP_LOGIN_URL)
