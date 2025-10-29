@@ -200,7 +200,9 @@ def collect_non_zero_po_numbers(page, max_pages=1):
         break
     return po_list
 
-def collect_rev0_po_numbers(page, max_pages=1):
+import datetime
+
+def collect_rev0_po_numbers(page):
     po_list = []
 
     # Navigate to PO history and advanced search
@@ -213,32 +215,22 @@ def collect_rev0_po_numbers(page, max_pages=1):
     page.wait_for_load_state('load')
     page.wait_for_timeout(5000)
 
-    current_page = 1
-    while current_page <= max_pages:
-        page.wait_for_selector("table#PosRevHistoryTable\\:Content tbody tr", timeout=30000)
-        rows = page.query_selector_all("table#PosRevHistoryTable\\:Content tbody tr")
-        for row in rows:
-            po_number_elem = row.query_selector("td a[id*='PosPoNumRelNum']")
-            po_number = po_number_elem.inner_text().strip() if po_number_elem else ""
-            creation_date_elem = row.query_selector("td span[id*='PosOrderDateTime']")
-            creation_date = creation_date_elem.inner_text().strip() if creation_date_elem else ""
-            if po_number:
-                po_list.append({
-                    "po_number": po_number,
-                    "rev": "0",
-                    "creation_date": creation_date,
-                    "scraped_at": datetime.datetime.now().isoformat(),
-                    "items": []
-                })
-
-        next_button = page.query_selector("a:has-text('Next')")
-        if next_button and "disabled" not in (next_button.get_attribute("class") or "").lower():
-            if not safe_click(page, "a:has-text('Next')", retries=3):
-                print("[WARNING] Could not click Next button. Stopping pagination.")
-                break
-            current_page += 1
-            continue
-        break
+    # Scrape only the current page
+    page.wait_for_selector("table#PosRevHistoryTable\\:Content tbody tr", timeout=30000)
+    rows = page.query_selector_all("table#PosRevHistoryTable\\:Content tbody tr")
+    for row in rows:
+        po_number_elem = row.query_selector("td a[id*='PosPoNumRelNum']")
+        po_number = po_number_elem.inner_text().strip() if po_number_elem else ""
+        creation_date_elem = row.query_selector("td span[id*='PosOrderDateTime']")
+        creation_date = creation_date_elem.inner_text().strip() if creation_date_elem else ""
+        if po_number:
+            po_list.append({
+                "po_number": po_number,
+                "rev": "0",
+                "creation_date": creation_date,
+                "scraped_at": datetime.datetime.now().isoformat(),
+                "items": []
+            })
 
     return po_list
 
