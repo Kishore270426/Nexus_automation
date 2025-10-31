@@ -190,13 +190,13 @@ def collect_non_zero_po_numbers(page, max_pages=1):
                         "items": []
                     })
 
-        next_button = page.query_selector("a:has-text('Next')")
-        if next_button and "disabled" not in (next_button.get_attribute("class") or "").lower():
+        #next_button = page.query_selector("a:has-text('Next')")
+        """if next_button and "disabled" not in (next_button.get_attribute("class") or "").lower():
             if not safe_click(page, "a:has-text('Next')", retries=3):
                 print("[WARNING] Could not click Next button. Stopping pagination.")
                 break
             current_page += 1
-            continue
+            continue"""
         break
     return po_list
 
@@ -307,7 +307,7 @@ def scrape_indus_po_data():
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
+            browser = p.chromium.launch(headless=False)
             context = browser.new_context()
             page = context.new_page()
             page.goto(ERP_LOGIN_URL)
