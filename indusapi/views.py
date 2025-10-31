@@ -31,12 +31,9 @@ redis_client = Redis(
 @permission_classes([]) 
 @token_required
 def get_po_data(request):
-    """
-    Get PO data from Redis if token is valid. 
-    Username/password are no longer checked.
-    """
+
     try:
-        data = redis_client.get("indus_po_data")
+        data = redis_client.get("indus_latest_data")
         if data:
             records = json.loads(data)
             return Response({
@@ -144,15 +141,7 @@ from .utils import token_required
 @permission_classes([])
 @token_required
 def update_cron_time(request):
-    """
-    Update job time in Redis + scheduler.
-    Example request:
-    {
-        "job_id": "indus_po_scraper",
-        "hour": 14,
-        "minute": 30
-    }
-    """
+
     try:
         job_id = request.data.get("job_id")
         hour = int(request.data.get("hour"))
