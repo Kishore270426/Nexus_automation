@@ -154,119 +154,7 @@ def scrape_po_details(page, po_number, retries=3):
     print(f"[ERROR] Failed to load table for PO {po_number} after {retries} retries")
     return []
 
-
-
-def go_to_orders_page(page):
-    if not safe_click(page, "a:has-text('Orders')"):
-        print("[ERROR] Cannot navigate to Orders page")
-        return False
-    try:
-        page.wait_for_selector("span#ResultRN1 table tbody tr", timeout=60000)
-        return True
-    except TimeoutError:
-        print("[ERROR] Orders table did not load in time")
-        return False
-
-# ================= COLLECT POs WITH PAGINATION =================
-def collect_non_zero_po_numbers(page, max_pages=1):
-    po_list = []
-    current_page = 1
-
-    while current_page <= max_pages:
-        page.wait_for_selector("span#ResultRN1 table tbody tr", timeout=30000)
-        rows = page.query_selector_all("span#ResultRN1 table tbody tr")
-        for row in rows:
-            cells = row.query_selector_all("td")
-            if len(cells) >= 6:
-                po_number = cells[0].inner_text().strip()
-                rev = cells[1].inner_text().strip()
-                order_date = cells[5].inner_text().strip()
-                if po_number and rev and rev == "0":
-                    po_list.append({
-                        "po_number": po_number,
-                        "rev": rev,
-                        "order_date": order_date,
-                        "scraped_at": datetime.datetime.now().isoformat(),
-                        "items": []
-                    })
-
-        #next_button = page.query_selector("a:has-text('Next')")
-        """if next_button and "disabled" not in (next_button.get_attribute("class") or "").lower():
-            if not safe_click(page, "a:has-text('Next')", retries=3):
-                print("[WARNING] Could not click Next button. Stopping pagination.")
-                break
-            current_page += 1
-            continue"""
-        break
-    return po_list
-
-def collect_rev0_po_numbers(page, max_pages=1):
-    po_list = []
-
-    # Navigate to PO history and advanced search
-    safe_click(page, "a#POS_PO_HISTORY")
-    print("[INFO] Navigated to PO History")
-    safe_click(page, "button[title='Advanced Search']")
-    print("[INFO] Opened Advanced Search")
-    safe_click(page, "button#customizeSubmitButton")
-    page.wait_for_load_state('load')
-    page.wait_for_timeout(5000)
-
-    current_page = 1
-    while current_page <= max_pages:
-        page.wait_for_selector("table#PosRevHistoryTable\\:Content tbody tr", timeout=30000)
-        rows = page.query_selector_all("table#PosRevHistoryTable\\:Content tbody tr")
-        for row in rows:
-            po_number_elem = row.query_selector("td a[id*='PosPoNumRelNum']")
-            po_number = po_number_elem.inner_text().strip() if po_number_elem else ""
-            creation_date_elem = row.query_selector("td span[id*='PosOrderDateTime']")
-            creation_date = creation_date_elem.inner_text().strip() if creation_date_elem else ""
-            if po_number:
-                po_list.append({
-                    "po_number": po_number,
-                    "rev": "0",
-                    "creation_date": creation_date,
-                    "scraped_at": datetime.datetime.now().isoformat(),
-                    "items": []
-                })
-
-        next_button = page.query_selector("a:has-text('Next')")
-        if next_button and "disabled" not in (next_button.get_attribute("class") or "").lower():
-            if not safe_click(page, "a:has-text('Next')", retries=3):
-                print("[WARNING] Could not click Next button. Stopping pagination.")
-                break
-            current_page += 1
-            continue
-        break
-
-    return po_list
-
-
-def find_po_in_pages(page, po_number, max_pages=20, retries=3):
-    attempt = 0
-    while attempt < retries:
-        current_page = 1
-        while current_page <= max_pages:
-            try:
-                po_link_selector = f"a:has-text('{po_number}')"
-                page.wait_for_selector(po_link_selector, timeout=5000)
-                return po_link_selector
-            except TimeoutError:
-                next_button = page.query_selector("a:has-text('Next')")
-                if next_button and "disabled" not in (next_button.get_attribute("class") or "").lower():
-                    if not safe_click(page, "a:has-text('Next')", retries=3):
-                        print("[WARNING] Could not click Next button while searching for PO.")
-                        break
-                    current_page += 1
-                    continue
-                break
-        attempt += 1
-        page.reload()
-        page.wait_for_load_state("networkidle", timeout=30000)
-    return None
-
-
-# ================= SAFE NAVIGATION WITH RETRY =================
+# ================= SAFE NAVIGATION =================
 def safe_click(page, selector, timeout=30000, wait_for_load=True, retries=3):
     attempt = 0
     while attempt < retries:
@@ -285,7 +173,6 @@ def safe_click(page, selector, timeout=30000, wait_for_load=True, retries=3):
             print(f"[ERROR] Failed to click {selector}: {e}")
             return False
 
-# ================= WAIT FOR SELECTOR WITH RETRY =================
 def wait_for_selector_retry(page, selector, timeout=30000, retries=3):
     attempt = 0
     while attempt < retries:
@@ -302,71 +189,135 @@ def wait_for_selector_retry(page, selector, timeout=30000, retries=3):
             return False
 
 # ================= MAIN SCRAPER =================
-def scrape_indus_po_data():
+def scrape_indus_po_data(max_pages=1):
     result = []
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
+            browser = p.chromium.launch(headless=False)
             context = browser.new_context()
             page = context.new_page()
             page.goto(ERP_LOGIN_URL)
-            ERP_PASSWOR = "Nexus.ERP_2026"
 
-            # Login
-            page.fill("input#usernameField",(ERP_USERNAME))
-            page.fill("input#passwordField",(ERP_PASSWORD))
+            # ---- Login ----
+            page.fill("input#usernameField", ERP_USERNAME)
+            page.fill("input#passwordField", ERP_PASSWORD)
             safe_click(page, "button:has-text('Log In')")
-            print("[✓] Logged into ERP system")
             page.wait_for_load_state("networkidle", timeout=30000)
+            print("[✓] Logged into ERP system")
 
-            # ========= STEP 1: Non-zero rev POs =========
-            
+            # ---- Navigate to Orders ----
             safe_click(page, "img[title='Expand']")
             safe_click(page, "li >> text=Home Page")
             safe_click(page, "a:has-text('Orders')")
-            print("[INFO] Collecting non-zero rev PO numbers...")
-            non_zero_pos = collect_non_zero_po_numbers(page)
-            print(f"[INFO] Found {len(non_zero_pos)} non-zero rev POs")
+            print("[INFO] Starting PO scraping...")
 
-            for po in non_zero_pos:
-                if not go_to_orders_page(page):
-                    continue
-                po_link_selector = find_po_in_pages(page, po['po_number'])
-                if not po_link_selector:
-                    print(f"[WARNING] PO {po['po_number']} not found after retries")
-                    continue
-                safe_click(page, po_link_selector)
-                items = scrape_po_details(page, po['po_number'])
-                po['project'] = group_items_by_indus_id(items)
-                del po['items']
-                page.go_back()
-                page.wait_for_load_state("networkidle", timeout=30000)
-                result.append(po)
+            current_page = 1
+            seen_first_po = None
 
-            # ========= STEP 2: Rev=0 POs =========
-            print("[INFO] Collecting rev=0 PO numbers...")
-            rev0_pos = collect_rev0_po_numbers(page)
-            print(f"[INFO] Found {len(rev0_pos)} rev=0 POs")
+            while current_page <= max_pages:
+                page.wait_for_selector("span#ResultRN1 table tbody tr", timeout=30000)
+                rows = page.query_selector_all("span#ResultRN1 table tbody tr")
 
-            for po in rev0_pos:
-                if not go_to_orders_page(page):
+                if not rows:
+                    print("[INFO] No rows found on this page.")
+                    break
+
+                first_po_current = rows[0].query_selector_all("td")[0].inner_text().strip()
+                if first_po_current == seen_first_po:
+                    print("[INFO] Page repeated, stopping pagination.")
+                    break
+                seen_first_po = first_po_current
+
+                po_list = []
+                for row in rows:
+                    cells = row.query_selector_all("td")
+                    if len(cells) >= 6:
+                        po_number = cells[0].inner_text().strip()
+                        rev = cells[1].inner_text().strip()
+                        order_date = cells[5].inner_text().strip()
+
+                        if not po_number or any(x in po_number.lower() for x in ["next", "previous", "more"]):
+                            continue
+                        if not po_number[0].isalnum():
+                            continue
+
+                        po_list.append({
+                            "po_number": po_number,
+                            "rev": rev,
+                            "order_date": order_date,
+                            "scraped_at": datetime.datetime.now().isoformat(),
+                            "items": []
+                        })
+
+                print(f"[INFO] Page {current_page}: Found {len(po_list)} POs.")
+
+                # Visit each PO (with Advanced Search fallback)
+                for po in po_list:
+                    po_link_selector = f"span#ResultRN1 a:has-text('{po['po_number']}')"
+                    if not safe_click(page, po_link_selector):
+                        print(f"[INFO] PO {po['po_number']} not visible in table — using Advanced Search.")
+                        try:
+                            if not page.query_selector("input[name*='PO_NUMBER']"):
+                                safe_click(page, "button[title='Advanced Search']")
+                                page.wait_for_timeout(2000)
+                            po_number_field = page.query_selector("input[name*='PO_NUMBER']")
+                            if po_number_field:
+                                po_number_field.fill(po["po_number"])
+                            else:
+                                print("[WARNING] Could not find PO Number field in Advanced Search")
+                                continue
+                            go_button = page.query_selector("button:has-text('Go')")
+                            if go_button:
+                                page.evaluate("(btn) => btn.click()", go_button)
+                            else:
+                                print("[WARNING] Could not find Go button in Advanced Search")
+                                continue
+                            page.wait_for_selector("span#ResultRN1 table tbody tr", timeout=30000)
+                            search_po_link = page.query_selector(f"span#ResultRN1 a:has-text('{po['po_number']}')")
+                            if not search_po_link:
+                                print(f"[WARNING] No search results found for PO {po['po_number']}")
+                                continue
+                            page.evaluate("(link) => link.click()", search_po_link)
+                            page.wait_for_load_state("networkidle", timeout=30000)
+                            items = scrape_po_details(page, po['po_number'])
+                            po['project'] = group_items_by_indus_id(items)
+                            del po['items']
+                            try:
+                                date_elem = page.query_selector("span[id*='PosOrderDateTime']")
+                                if date_elem:
+                                    po["creation_date"] = date_elem.inner_text().strip()
+                            except Exception:
+                                pass
+                            page.go_back()
+                            page.wait_for_load_state("networkidle", timeout=30000)
+                            result.append(po)
+                        except Exception as e:
+                            print(f"[ERROR] Failed fallback Advanced Search for {po['po_number']}: {e}")
+                        continue
+
+                    # Normal flow (PO visible)
+                    items = scrape_po_details(page, po['po_number'])
+                    po['project'] = group_items_by_indus_id(items)
+                    del po['items']
+                    page.go_back()
+                    page.wait_for_load_state("networkidle", timeout=30000)
+                    result.append(po)
+
+                # Pagination
+                next_button = page.query_selector("a[title^='Next'], a:has-text('Next')")
+                if next_button and "disabled" not in (next_button.get_attribute("class") or "").lower():
+                    page.evaluate("(btn) => btn.click()", next_button)
+                    page.wait_for_timeout(4000)
+                    current_page += 1
                     continue
-                po_link_selector = find_po_in_pages(page, po['po_number'])
-                if not po_link_selector:
-                    print(f"[WARNING] Rev=0 PO {po['po_number']} not found after retries")
-                    continue
-                safe_click(page, po_link_selector)
-                items = scrape_po_details(page, po['po_number'])
-                po['project'] = group_items_by_indus_id(items)
-                del po['items']
-                page.go_back()
-                page.wait_for_load_state("networkidle", timeout=30000)
-                result.append(po)
+                break
 
             browser.close()
+            print(f"[✓] Scraping completed. Total POs: {len(result)}")
             return store_po_data_with_deduplication(result)
 
     except Exception as e:
         print(f"[SCRAPER ERROR] {e}")
         return store_po_data_with_deduplication(result) if result else []
+
