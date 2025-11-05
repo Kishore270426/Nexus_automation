@@ -188,13 +188,20 @@ def wait_for_selector_retry(page, selector, timeout=30000, retries=3):
             print(f"[ERROR] Error waiting for {selector}: {e}")
             return False
 
-# ================= MAIN SCRAPER =================
-def scrape_indus_po_data(max_pages=1):
+def scrape_indus_po_data(max_pages=5):
+    """
+    Scrapes multiple pages of PO numbers first, then visits each PO to scrape details individually.
+    After first 25 POs, uses Advanced Search to fetch remaining POs one by one.
+    Ensures Orders tab is reloaded:
+      1) Once after PO collection
+      2) Before each Advanced Search for POs > 25
+    """
+    po_numbers = []
     result = []
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
+            browser = p.chromium.launch(headless=False)
             context = browser.new_context()
             page = context.new_page()
             page.goto(ERP_LOGIN_URL)
@@ -210,26 +217,14 @@ def scrape_indus_po_data(max_pages=1):
             safe_click(page, "img[title='Expand']")
             safe_click(page, "li >> text=Home Page")
             safe_click(page, "a:has-text('Orders')")
-            print("[INFO] Starting PO scraping...")
+            print(f"[INFO] Starting PO number collection (up to {max_pages} pages)...")
 
+            # Step 1: Collect all PO numbers from pages
             current_page = 1
-            seen_first_po = None
-
             while current_page <= max_pages:
                 page.wait_for_selector("span#ResultRN1 table tbody tr", timeout=30000)
                 rows = page.query_selector_all("span#ResultRN1 table tbody tr")
 
-                if not rows:
-                    print("[INFO] No rows found on this page.")
-                    break
-
-                first_po_current = rows[0].query_selector_all("td")[0].inner_text().strip()
-                if first_po_current == seen_first_po:
-                    print("[INFO] Page repeated, stopping pagination.")
-                    break
-                seen_first_po = first_po_current
-
-                po_list = []
                 for row in rows:
                     cells = row.query_selector_all("td")
                     if len(cells) >= 6:
@@ -242,7 +237,7 @@ def scrape_indus_po_data(max_pages=1):
                         if not po_number[0].isalnum():
                             continue
 
-                        po_list.append({
+                        po_numbers.append({
                             "po_number": po_number,
                             "rev": rev,
                             "order_date": order_date,
@@ -250,68 +245,105 @@ def scrape_indus_po_data(max_pages=1):
                             "items": []
                         })
 
-                print(f"[INFO] Page {current_page}: Found {len(po_list)} POs.")
+                print(f"[INFO] Page {current_page}: Collected {len(rows)} POs")
 
-                # Visit each PO (with Advanced Search fallback)
-                for po in po_list:
-                    po_link_selector = f"span#ResultRN1 a:has-text('{po['po_number']}')"
-                    if not safe_click(page, po_link_selector):
-                        print(f"[INFO] PO {po['po_number']} not visible in table — using Advanced Search.")
-                        try:
-                            if not page.query_selector("input[name*='PO_NUMBER']"):
-                                safe_click(page, "button[title='Advanced Search']")
-                                page.wait_for_timeout(2000)
-                            po_number_field = page.query_selector("input[name*='PO_NUMBER']")
-                            if po_number_field:
-                                po_number_field.fill(po["po_number"])
-                            else:
-                                print("[WARNING] Could not find PO Number field in Advanced Search")
-                                continue
-                            go_button = page.query_selector("button:has-text('Go')")
-                            if go_button:
-                                page.evaluate("(btn) => btn.click()", go_button)
-                            else:
-                                print("[WARNING] Could not find Go button in Advanced Search")
-                                continue
-                            page.wait_for_selector("span#ResultRN1 table tbody tr", timeout=30000)
-                            search_po_link = page.query_selector(f"span#ResultRN1 a:has-text('{po['po_number']}')")
-                            if not search_po_link:
-                                print(f"[WARNING] No search results found for PO {po['po_number']}")
-                                continue
-                            page.evaluate("(link) => link.click()", search_po_link)
-                            page.wait_for_load_state("networkidle", timeout=30000)
+                # Move to next page if available
+                next_button = page.query_selector("a.x49[title='Next 25'], a:has-text('Next 25')")
+                if next_button:
+                    safe_click(page, "a.x49[title='Next 25'], a:has-text('Next 25')")
+                    page.wait_for_timeout(2000)
+                    current_page += 1
+                else:
+                    break
+
+            print(f"[✓] Collected total {len(po_numbers)} PO numbers")
+
+            # ---- Reset Orders tab once before starting detail scraping ----
+            safe_click(page, "a:has-text('Orders')")
+            print("[INFO] Reset Orders tab before starting detail scraping, waiting 15 seconds...")
+            page.wait_for_timeout(15000)
+
+            # Step 2: Visit each PO to scrape details
+            for idx, po in enumerate(po_numbers, 1):
+                print(f"[INFO] Scraping details for PO {idx}/{len(po_numbers)}: {po['po_number']}")
+
+                if idx <= 25:
+                    # ---- First 25 POs: normal navigation ----
+                    try:
+                        po_link_selector = f"span#ResultRN1 a:has-text('{po['po_number']}')"
+                        if safe_click(page, po_link_selector):
                             items = scrape_po_details(page, po['po_number'])
                             po['project'] = group_items_by_indus_id(items)
                             del po['items']
+
+                            # Scrape creation date
                             try:
                                 date_elem = page.query_selector("span[id*='PosOrderDateTime']")
                                 if date_elem:
                                     po["creation_date"] = date_elem.inner_text().strip()
                             except Exception:
                                 pass
+
                             page.go_back()
                             page.wait_for_load_state("networkidle", timeout=30000)
-                            result.append(po)
-                        except Exception as e:
-                            print(f"[ERROR] Failed fallback Advanced Search for {po['po_number']}: {e}")
-                        continue
+                            print(f"[✓] Scraped details for PO {po['po_number']}")
+                    except Exception as e:
+                        print(f"[ERROR] Error scraping PO {po['po_number']}: {e}")
+                else:
+                    # ---- After 25 POs: use Advanced Search ----
+                    # ---- After 25 POs: use Advanced Search ----
+                    try:
+                        # Reload Orders tab before each Advanced Search
+                        print(f"[INFO] Reset Orders tab for Advanced Search for PO {po['po_number']}")
+                        safe_click(page, "a:has-text('Orders')")
+                        page.wait_for_timeout(15000)
 
-                    # Normal flow (PO visible)
-                    items = scrape_po_details(page, po['po_number'])
-                    po['project'] = group_items_by_indus_id(items)
-                    del po['items']
-                    page.go_back()
-                    page.wait_for_load_state("networkidle", timeout=30000)
-                    result.append(po)
+                        # Click Advanced Search button
+                        print("[INFO] Clicking Advanced Search button")
+                        safe_click(page, "button#SrchBtn[title='Advanced Search']")
+                        page.wait_for_timeout(3000)
 
-                # Pagination
-                next_button = page.query_selector("a[title^='Next'], a:has-text('Next')")
-                if next_button and "disabled" not in (next_button.get_attribute("class") or "").lower():
-                    page.evaluate("(btn) => btn.click()", next_button)
-                    page.wait_for_timeout(4000)
-                    current_page += 1
-                    continue
-                break
+                        # Enter PO number in search field
+                        print(f"[INFO] Entering PO number {po['po_number']} in search field")
+                        page.fill("input#Value_0", po['po_number'])
+
+                        # Click Go button
+                        print("[INFO] Clicking Go button")
+                        safe_click(page, "button#customizeSubmitButton")
+                        # Wait for the PO results table
+                        page.wait_for_selector("table#ResultRN\\.PosVpoPoList\\:Content tbody tr", timeout=5000)
+
+                        # Click the PO link by inner text (handles dynamic IDs like N3, N5, etc.)
+                        po_link_selector = f"a[id*='PosPoNumber']:has-text('{po['po_number']}')"
+                        print(f"[INFO] Clicking PO link for {po['po_number']} in search results")
+
+                        if safe_click(page, po_link_selector):
+                            page.wait_for_load_state("networkidle", timeout=30000)
+
+                            items = scrape_po_details(page, po['po_number'])
+                            po['project'] = group_items_by_indus_id(items)
+                            del po['items']
+
+                            # Scrape creation date
+                            try:
+                                date_elem = page.query_selector("span[id*='PosOrderDateTime']")
+                                if date_elem:
+                                    po["creation_date"] = date_elem.inner_text().strip()
+                            except Exception:
+                                pass
+
+                            # Go back to PO summary table
+                            page.go_back()
+                            page.wait_for_load_state("networkidle", timeout=30000)
+                            print(f"[✓] Scraped details for PO {po['po_number']} via Advanced Search")
+                        else:
+                            print(f"[WARNING] PO {po['po_number']} not found in Advanced Search results")
+
+                    except Exception as e:
+                        print(f"[ERROR] Error scraping PO {po['po_number']} via Advanced Search: {e}")
+
+
+                result.append(po)
 
             browser.close()
             print(f"[✓] Scraping completed. Total POs: {len(result)}")
@@ -320,4 +352,3 @@ def scrape_indus_po_data(max_pages=1):
     except Exception as e:
         print(f"[SCRAPER ERROR] {e}")
         return store_po_data_with_deduplication(result) if result else []
-
