@@ -188,7 +188,7 @@ def wait_for_selector_retry(page, selector, timeout=30000, retries=3):
             print(f"[ERROR] Error waiting for {selector}: {e}")
             return False
 
-def scrape_indus_po_data(max_pages=2):
+def scrape_indus_po_data(max_pages=5):
     """
     Scrapes multiple pages of PO numbers first, then visits each PO to scrape details individually.
     After first 25 POs, uses Advanced Search to fetch remaining POs one by one.
@@ -201,7 +201,7 @@ def scrape_indus_po_data(max_pages=2):
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
+            browser = p.chromium.launch(headless=False)
             context = browser.new_context()
             page = context.new_page()
             page.goto(ERP_LOGIN_URL)
