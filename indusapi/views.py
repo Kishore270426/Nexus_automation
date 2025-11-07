@@ -33,7 +33,7 @@ redis_client = Redis(
 def get_po_data(request):
 
     try:
-        data = redis_client.get("indus_po_data")
+        data = redis_client.get("indus_latest_data")
         if data:
             records = json.loads(data)
             return Response({
