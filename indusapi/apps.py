@@ -9,7 +9,8 @@ class IndusapiConfig(AppConfig):
 
     def ready(self):
         # Avoid running scheduler twice in Django's autoreload
-        if os.environ.get('RUN_MAIN') != 'true':
-            return
-        print("[AppConfig] Starting scheduler inside Django...")
-        start_scheduler()
+        #if os.environ.get('RUN_MAIN') != 'true':
+        #   return
+        #print("[AppConfig] Starting scheduler inside Django...")
+        #start_scheduler()
+        pass
