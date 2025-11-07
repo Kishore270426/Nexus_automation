@@ -1,7 +1,7 @@
 # indusapi/apps.py
 from django.apps import AppConfig
 import os
-from indusproject.scheduler import start_scheduler
+#from indusproject.scheduler import start_scheduler
 
 class IndusapiConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
