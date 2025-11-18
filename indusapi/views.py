@@ -104,7 +104,7 @@ def update_erp_password(request):
             return Response({"error": "Password not provided"}, status=400)
 
         # Absolute path to credentials.py
-        credentials_path = r"\Nexus_automation\indusproject\credentials.py"
+        credentials_path = r"\home\ubuntu\Nexus_automation\indusproject\credentials.py"
 
         if not os.path.exists(credentials_path):
             return Response({"error": f"credentials.py not found at {credentials_path}"}, status=404)
