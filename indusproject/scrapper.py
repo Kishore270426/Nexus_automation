@@ -188,7 +188,7 @@ def wait_for_selector_retry(page, selector, timeout=30000, retries=3):
             print(f"[ERROR] Error waiting for {selector}: {e}")
             return False
 
-def scrape_indus_po_data(max_pages=2):
+def scrape_indus_po_data(max_pages=6):
     """
     Scrapes multiple pages of PO numbers first, then visits each PO to scrape details individually.
     After first 25 POs, uses Advanced Search to fetch remaining POs one by one.
