@@ -16,9 +16,6 @@ from rest_framework import status
 from indusproject.scheduler import update_job_schedule
 from .utils import token_required
 
-
-
-
 load_dotenv()
 redis_client = Redis(
     host=os.getenv("REDIS_HOST"),
@@ -33,7 +30,7 @@ redis_client = Redis(
 def get_po_data(request):
 
     try:
-        data = redis_client.get("indus_po_data")
+        data = redis_client.get("indus_latest_data")
         if data:
             records = json.loads(data)
             return Response({
@@ -130,7 +127,7 @@ def update_erp_password(request):
         return Response({"error": str(e)}, status=500)
 
 
-# indusapi/views.py
+
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from indusproject.scheduler import update_job_schedule
