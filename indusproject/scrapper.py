@@ -1,4 +1,4 @@
-import os, json, datetime
+import os, json, datetime, logging
 from dotenv import load_dotenv
 from playwright.sync_api import sync_playwright, TimeoutError
 from redis import Redis
@@ -6,33 +6,41 @@ from .credentials import *
 
 load_dotenv()
 
+# Configure production-level logging
+logger = logging.getLogger('indusproject.scrapper')
+
 # ================= REDIS HELPERS =================
 def ConnectRedis():
     try:
-        return Redis(
+        redis_client = Redis(
             host=os.getenv("REDIS_HOST"),
             port=int(os.getenv("REDIS_PORT")),
             db=int(os.getenv("REDIS_DB"))
         )
+        logger.info("Successfully connected to Redis")
+        return redis_client
     except Exception as e:
-        print("Error in connecting redis:", str(e))
+        logger.error(f"Error connecting to Redis: {str(e)}", exc_info=True)
         return None
 
 def get_redis_data(key):
     try:
         redis_client = ConnectRedis()
         cached_data = redis_client.get(key)
+        if cached_data:
+            logger.info(f"Successfully retrieved data from Redis key: {key}")
         return json.loads(cached_data) if cached_data else []
     except Exception as e:
-        print(f"[CACHE ERROR] {e}")
+        logger.error(f"Error retrieving data from Redis key '{key}': {str(e)}", exc_info=True)
         return []
 
 def set_redis_data(key, data):
     try:
         redis_client = ConnectRedis()
         redis_client.set(key, json.dumps(data))
+        logger.info(f"Successfully stored data in Redis key: {key}")
     except Exception as e:
-        print(f"[REDIS SET ERROR] {e}")
+        logger.error(f"Error storing data in Redis key '{key}': {str(e)}", exc_info=True)
 
 def remove_duplicates_by_date(existing_data, new_data):
     try:
@@ -45,9 +53,10 @@ def remove_duplicates_by_date(existing_data, new_data):
             item for item in new_data
             if (item.get("order_date") or item.get("creation_date")) not in existing_dates
         ]
+        logger.info(f"Deduplicated data: {len(new_data)} new items, {len(unique_new_data)} unique")
         return unique_new_data
     except Exception as e:
-        print(f"[DEDUPE ERROR] {e}")
+        logger.error(f"Error during deduplication: {str(e)}", exc_info=True)
         return new_data
 
 def store_po_data_with_deduplication(new_data):
@@ -56,15 +65,15 @@ def store_po_data_with_deduplication(new_data):
         filtered_new_data = remove_duplicates_by_date(existing_po_data, new_data)
 
         set_redis_data("indus_latest_data", filtered_new_data)
-        print(f"[✓] Stored {len(filtered_new_data)} new PO records to 'indus_latest_data'")
+        logger.info(f"Stored {len(filtered_new_data)} new PO records to 'indus_latest_data'")
 
         updated_po_data = existing_po_data + filtered_new_data
         set_redis_data("indus_po_data", updated_po_data)
-        print(f"[✓] Updated 'indus_po_data' with total {len(updated_po_data)} records")
+        logger.info(f"Updated 'indus_po_data' with total {len(updated_po_data)} records")
 
         return filtered_new_data
     except Exception as e:
-        print(f"[STORE ERROR] {e}")
+        logger.error(f"Error storing PO data: {str(e)}", exc_info=True)
         return []
 
 # ================= DATA GROUPING =================
@@ -90,9 +99,10 @@ def group_items_by_indus_id(items):
                 "price": item.get('price', ''),
                 "qty": item.get('qty', '')
             })
+        logger.info(f"Grouped {len(items)} items into {len(grouped)} projects")
         return list(grouped.values())
     except Exception as e:
-        print(f"[ERROR] Error grouping items by indus_id: {e}")
+        logger.error(f"Error grouping items by indus_id: {str(e)}", exc_info=True)
         return []
 
 # ================= SCRAPING HELPERS =================
@@ -144,14 +154,15 @@ def scrape_po_details(page, po_number, retries=3):
                         "indus_id": indus_id
                     })
                 except Exception as e:
-                    print(f"[WARNING] Error parsing row in PO {po_number}: {e}")
+                    logger.warning(f"Error parsing row in PO {po_number}: {str(e)}")
+            logger.info(f"Successfully extracted {len(items)} items from PO {po_number}")
             return items
         except TimeoutError:
             attempt += 1
-            print(f"[TIMEOUT] Table not loaded for PO {po_number}. Retry {attempt}/{retries}")
+            logger.warning(f"Table not loaded for PO {po_number}. Retry {attempt}/{retries}")
             page.reload()
             page.wait_for_load_state("networkidle", timeout=30000)
-    print(f"[ERROR] Failed to load table for PO {po_number} after {retries} retries")
+    logger.error(f"Failed to load table for PO {po_number} after {retries} retries")
     return []
 
 # ================= SAFE NAVIGATION =================
@@ -166,11 +177,11 @@ def safe_click(page, selector, timeout=30000, wait_for_load=True, retries=3):
             return True
         except TimeoutError:
             attempt += 1
-            print(f"[WARNING] Timeout while waiting for {selector}. Retry {attempt}/{retries}")
+            logger.warning(f"Timeout while waiting for {selector}. Retry {attempt}/{retries}")
             if attempt >= retries:
                 return False
         except Exception as e:
-            print(f"[ERROR] Failed to click {selector}: {e}")
+            logger.error(f"Failed to click {selector}: {str(e)}")
             return False
 
 def wait_for_selector_retry(page, selector, timeout=30000, retries=3):
@@ -181,11 +192,11 @@ def wait_for_selector_retry(page, selector, timeout=30000, retries=3):
             return True
         except TimeoutError:
             attempt += 1
-            print(f"[WARNING] Timeout waiting for {selector}. Retry {attempt}/{retries}")
+            logger.warning(f"Timeout waiting for {selector}. Retry {attempt}/{retries}")
             if attempt >= retries:
                 return False
         except Exception as e:
-            print(f"[ERROR] Error waiting for {selector}: {e}")
+            logger.error(f"Error waiting for {selector}: {str(e)}")
             return False
 
 def scrape_indus_po_data(max_pages=3):
@@ -211,13 +222,13 @@ def scrape_indus_po_data(max_pages=3):
             page.fill("input#passwordField", ERP_PASSWORD)
             safe_click(page, "button:has-text('Log In')")
             page.wait_for_load_state("networkidle", timeout=30000)
-            print("[✓] Logged into ERP system")
+            logger.info("Successfully logged into ERP system")
 
             # ---- Navigate to Orders ----
             safe_click(page, "img[title='Expand']")
             safe_click(page, "li >> text=Home Page")
             safe_click(page, "a:has-text('Orders')")
-            print(f"[INFO] Starting PO number collection (up to {max_pages} pages)...")
+            logger.info(f"Starting PO number collection (up to {max_pages} pages)...")
 
             # Step 1: Collect all PO numbers from pages
             current_page = 1
@@ -245,7 +256,7 @@ def scrape_indus_po_data(max_pages=3):
                             "items": []
                         })
 
-                print(f"[INFO] Page {current_page}: Collected {len(rows)} POs")
+                logger.info(f"Page {current_page}: Collected {len(rows)} POs, total: {len(po_numbers)}")
 
                 # Move to next page if available
                 next_button = page.query_selector("a.x49[title='Next 25'], a:has-text('Next 25')")
@@ -256,16 +267,16 @@ def scrape_indus_po_data(max_pages=3):
                 else:
                     break
 
-            print(f"[✓] Collected total {len(po_numbers)} PO numbers")
+            logger.info(f"Collected total {len(po_numbers)} PO numbers")
 
             # ---- Reset Orders tab once before starting detail scraping ----
             safe_click(page, "a:has-text('Orders')")
-            print("[INFO] Reset Orders tab before starting detail scraping, waiting 15 seconds...")
+            logger.info("Reset Orders tab before starting detail scraping, waiting 15 seconds...")
             page.wait_for_timeout(15000)
 
             # Step 2: Visit each PO to scrape details
             for idx, po in enumerate(po_numbers, 1):
-                print(f"[INFO] Scraping details for PO {idx}/{len(po_numbers)}: {po['po_number']}")
+                logger.info(f"Scraping details for PO {idx}/{len(po_numbers)}: {po['po_number']}")
 
                 if idx <= 25:
                     # ---- First 25 POs: normal navigation ----
@@ -286,36 +297,36 @@ def scrape_indus_po_data(max_pages=3):
 
                             page.go_back()
                             page.wait_for_load_state("networkidle", timeout=30000)
-                            print(f"[✓] Scraped details for PO {po['po_number']}")
+                            logger.info(f"Scraped details for PO {po['po_number']}")
                     except Exception as e:
-                        print(f"[ERROR] Error scraping PO {po['po_number']}: {e}")
+                        logger.error(f"Error scraping PO {po['po_number']}: {str(e)}", exc_info=True)
                 else:
                     # ---- After 25 POs: use Advanced Search ----
                     # ---- After 25 POs: use Advanced Search ----
                     try:
                         # Reload Orders tab before each Advanced Search
-                        print(f"[INFO] Reset Orders tab for Advanced Search for PO {po['po_number']}")
+                        logger.info(f"Reset Orders tab for Advanced Search for PO {po['po_number']}")
                         safe_click(page, "a:has-text('Orders')")
                         page.wait_for_timeout(15000)
 
                         # Click Advanced Search button
-                        print("[INFO] Clicking Advanced Search button")
+                        logger.info("Clicking Advanced Search button")
                         safe_click(page, "button#SrchBtn[title='Advanced Search']")
                         page.wait_for_timeout(3000)
 
                         # Enter PO number in search field
-                        print(f"[INFO] Entering PO number {po['po_number']} in search field")
+                        logger.info(f"Entering PO number {po['po_number']} in search field")
                         page.fill("input#Value_0", po['po_number'])
 
                         # Click Go button
-                        print("[INFO] Clicking Go button")
+                        logger.info("Clicking Go button")
                         safe_click(page, "button#customizeSubmitButton")
                         # Wait for the PO results table
                         page.wait_for_selector("table#ResultRN\\.PosVpoPoList\\:Content tbody tr", timeout=5000)
 
                         # Click the PO link by inner text (handles dynamic IDs like N3, N5, etc.)
                         po_link_selector = f"a[id*='PosPoNumber']:has-text('{po['po_number']}')"
-                        print(f"[INFO] Clicking PO link for {po['po_number']} in search results")
+                        logger.info(f"Clicking PO link for {po['po_number']} in search results")
 
                         if safe_click(page, po_link_selector):
                             page.wait_for_load_state("networkidle", timeout=30000)
@@ -335,20 +346,20 @@ def scrape_indus_po_data(max_pages=3):
                             # Go back to PO summary table
                             page.go_back()
                             page.wait_for_load_state("networkidle", timeout=30000)
-                            print(f"[✓] Scraped details for PO {po['po_number']} via Advanced Search")
+                            logger.info(f"Scraped details for PO {po['po_number']} via Advanced Search")
                         else:
-                            print(f"[WARNING] PO {po['po_number']} not found in Advanced Search results")
+                            logger.warning(f"PO {po['po_number']} not found in Advanced Search results")
 
                     except Exception as e:
-                        print(f"[ERROR] Error scraping PO {po['po_number']} via Advanced Search: {e}")
+                        logger.error(f"Error scraping PO {po['po_number']} via Advanced Search: {str(e)}", exc_info=True)
 
 
                 result.append(po)
 
             browser.close()
-            print(f"[✓] Scraping completed. Total POs: {len(result)}")
+            logger.info(f"Scraping completed successfully. Total POs: {len(result)}")
             return store_po_data_with_deduplication(result)
 
     except Exception as e:
-        print(f"[SCRAPER ERROR] {e}")
+        logger.error(f"Scraper error: {str(e)}", exc_info=True)
         return store_po_data_with_deduplication(result) if result else []
